@@ -1,5 +1,5 @@
-import { formatId } from "@utils/formatId";
 import { createContext, useContext, useState } from "react";
+import { formatId } from "@utils/formatId";
 
 // Cart context
 const CartContext = createContext();
@@ -10,17 +10,16 @@ export const useCart = () => useContext(CartContext);
 // Cart provider
 export const CartProvider = ({ children }) => {
   const [cartItems, setCartItems] = useState([]);
-  const [isOpen, setIsOpen] = useState(false);
 
   // Open and close cart
   const openCart = () => setIsOpen(true);
   const closeCart = () => setIsOpen(false);
 
   // Total quantity
-  // const cartQuantity = cartItem.reduce(
-  //   (quantity, currentItem) => quantity + currentItem.quantity,
-  //   0
-  // );
+  const cartQuantity = cartItems.reduce(
+    (quantity, currentItem) => quantity + currentItem.quantity,
+    0
+  );
 
   // Get the quantity
   const getItemQuantity = (id) => {
@@ -28,38 +27,83 @@ export const CartProvider = ({ children }) => {
     return cartItems.find((item) => item.id === id)?.quantity || 0;
   };
 
-  // Increase quantity
-  const increaseQuantity = (product, variantId) => {
-    console.log(variantId);
+  //  Change variant
+  const changeVariant = (product, variantId) => {
+    // Get the product id
     const productId = formatId(product.id);
-    const variant = product.variants[0].title;
-    const genericPrice = parseFloat(product.variants[0].price);
+
+    // Get variant price with variant id
     const variantPrice = product.variants.find(
       (variant) => formatId(variant.id) === variantId
-    )?.price;
-    const price = variantId ? variantPrice : genericPrice;
+    ).price;
 
-    setCartItems((currItems) => {
+    // Update the items in cart
+    setCartItems((prevItems) => {
       // If there is no item in the cart with the product id then create an item
-      if (currItems.find((item) => item.id === productId) == null) {
+      if (prevItems.find((item) => item.productId === productId) == null) {
         return [
-          ...currItems,
+          ...prevItems,
           {
-            id: productId,
+            productId,
             name: product.title,
+            variantId,
             quantity: 1,
-            variant,
-            price,
+            price: variantPrice,
+          },
+        ];
+      } else {
+        // If there is an item in the cart with the product id then update the item
+        return prevItems.map((item) => {
+          if (item.productId === productId) {
+            return {
+              ...item,
+              variantId,
+              price: variantPrice * item.quantity,
+            };
+          } else {
+            return item;
+          }
+        });
+      }
+    });
+  };
+
+  // Increase quantity
+  const increaseQuantity = (product) => {
+    // Get product id
+    const productId = formatId(product.id);
+
+    // Get either variant id from cart of initial variant id
+    const variantId =
+      cartItems.find((item) => item.productId === productId)?.variantId ||
+      formatId(product.variants[0].id);
+
+    // Get variant price with variant id
+    const variantPrice = product.variants.find(
+      (variant) => formatId(variant.id) === variantId
+    ).price;
+
+    setCartItems((prevItems) => {
+      // If there is no item in the cart with the product id then create an item
+      if (prevItems.find((item) => item.productId === productId) == null) {
+        return [
+          ...prevItems,
+          {
+            productId,
+            name: product.title,
+            variantId,
+            quantity: 1,
+            price: variantPrice,
           },
         ];
       } else {
         // If there is an item in the cart with the product id then update the cart
-        return currItems.map((item) => {
-          if (item.id === productId) {
+        return prevItems.map((item) => {
+          if (item.productId === productId) {
             return {
               ...item,
               quantity: item.quantity + 1,
-              price: (item.quantity + 1) * price,
+              price: (item.quantity + 1) * variantPrice,
             };
           } else {
             // If the provided id doesn't match with the item id then return the item
@@ -113,13 +157,13 @@ export const CartProvider = ({ children }) => {
     <CartContext.Provider
       value={{
         cartItems,
+        cartQuantity,
         setCartItems,
+        changeVariant,
         getItemQuantity,
         increaseQuantity,
         decreaseQuantity,
         removeFromCart,
-        openCart,
-        closeCart,
       }}
     >
       {children}

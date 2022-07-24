@@ -1,4 +1,3 @@
-import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { shopifyClient } from "@utils/shopify";
@@ -9,59 +8,24 @@ import styles from "@styles/products/products.module.css";
 
 const ProductsPage = ({ products }) => {
   // Hooks
-  const [variantId, setVariantId] = useState("");
-  const { cartItems, increaseQuantity, decreaseQuantity, addToCart } =
-    useCart();
+  const {
+    cartItems,
+    changeVariant,
+    increaseQuantity,
+    decreaseQuantity,
+    addToCart,
+  } = useCart();
 
-  console.log(cartItems);
-
-  // Handle quantity change
-  const handleQuantity = (productId) => {
-    let quantity;
-
-    if (cartItems.length > 0) {
-      return (quantity = cartItems.find(
-        (item) => item.id === productId
-      )?.quantity);
-    }
-
-    return quantity;
-  };
-
-  // Handle different price
-  const handlePrice = (product) => {
-    let price;
-
-    // Initial price
-    const initialPrice = parseFloat(product.variants[0].price);
-
-    // Item quantity
-    const itemQuantity = handleQuantity(formatId(product.id));
-
-    // Variant price
-    const variantPrice = parseFloat(
-      product.variants.find((variant) => formatId(variant.id) === variantId)
-        ?.price
-    );
-
-    // Change price based on logic
-    if (!itemQuantity && !variantPrice) {
-      return (price = initialPrice);
-    } else if (itemQuantity && !variantPrice) {
-      return (price = itemQuantity * initialPrice);
-    } else if (!itemQuantity && variantPrice) {
-      return (price = variantPrice);
-    } else if (itemQuantity && variantPrice) {
-      return (price = itemQuantity * variantPrice);
-    }
-
-    return price;
+  // Cart item
+  const item = (productId) => {
+    return cartItems.find((item) => item.productId === productId);
   };
 
   return (
     <div className={styles.Products}>
       {products.map((product) => (
         <div key={formatId(product.id)} className={styles.Product}>
+          {/* Product title and image */}
           <Link href={`/products/${formatId(product.id)}`}>
             <a>
               <h3>{product.title}</h3>
@@ -75,7 +39,7 @@ const ProductsPage = ({ products }) => {
           </Link>
 
           {/* Product variant options */}
-          <select onChange={(e) => setVariantId(e.target.value)}>
+          <select onChange={(e) => changeVariant(product, e.target.value)}>
             {product.variants.map((variant) => (
               <option key={formatId(variant.id)} value={formatId(variant.id)}>
                 {variant.title}
@@ -83,16 +47,23 @@ const ProductsPage = ({ products }) => {
             ))}
           </select>
 
-          <AiOutlinePlus onClick={() => increaseQuantity(product, variantId)} />
+          {/* Increase quantity button */}
+          <AiOutlinePlus onClick={() => increaseQuantity(product)} />
 
-          <span>{handleQuantity(formatId(product.id))}</span>
+          {/* Quantity */}
+          <span>{item(formatId(product.id))?.quantity}</span>
 
           {/* Render the minus button if product quantity is more than 1 */}
-          {handleQuantity(formatId(product.id)) > 1 && (
+          {item(formatId(product.id))?.quantity > 1 && (
             <AiOutlineMinus onClick={() => decreaseQuantity(product)} />
           )}
 
-          <p>AUD $ {handlePrice(product)}</p>
+          {/* Render cart item price or initial price */}
+          <p>
+            AUD $
+            {item(formatId(product.id))?.price ||
+              parseFloat(product.variants[0].price)}
+          </p>
 
           <button onClick={() => addToCart(product)}>Add to Cart</button>
         </div>
