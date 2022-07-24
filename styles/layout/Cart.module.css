@@ -1,0 +1,39 @@
+.Overlay {
+  position: absolute;
+  background-color: rgba(0, 0, 0, 0.516);
+  width: 100vw;
+  height: 100vh;
+  top: 0;
+  right: -100%;
+  z-index: 1;
+  transition: all 250ms;
+}
+
+.Open {
+  right: 0;
+}
+
+.Cart {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 30vw;
+  height: 100vh;
+  background-color: white;
+  padding: 0.5rem 1.5rem;
+}
+
+.CartHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.CartHeader svg {
+  width: 1.5rem;
+  height: 1.5rem;
+  padding: 0.25rem;
+  background-color: rgb(216, 216, 216);
+  border-radius: 50%;
+  cursor: pointer;
+}
