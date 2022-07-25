@@ -9,12 +9,13 @@ export const useCart = () => useContext(CartContext);
 
 // Cart provider
 export const CartProvider = ({ children }) => {
+  const [initialItems, setInitialItems] = useState([]);
   const [cartItems, setCartItems] = useState([]);
   const [cartQuantity, setCartQuantity] = useState(null);
 
   // Get cart items and quantity from local storage
   const getCartItemsAndQuantity = () => {
-    const items = JSON.parse(localStorage.getItem("cartItems"));
+    const items = JSON.parse(localStorage.getItem("initialItems"));
 
     // Update cartItems and cartQuantity state
     setCartItems((prevItems) => items || prevItems);
@@ -37,8 +38,8 @@ export const CartProvider = ({ children }) => {
       (variant) => formatId(variant.id) === variantId
     );
 
-    // Update the cartItems state
-    setCartItems((prevItems) => {
+    // Update the initialItems state
+    setInitialItems((prevItems) => {
       // If there is no item in the cart with the product id then create an item
       if (prevItems.find((item) => item.productId === productId) == null) {
         return [
@@ -81,7 +82,7 @@ export const CartProvider = ({ children }) => {
 
     // Variant id
     const variantId =
-      cartItems.find((item) => item.productId === productId)?.variantId ||
+      initialItems.find((item) => item.productId === productId)?.variantId ||
       formatId(product.variants[0].id);
 
     // Product variant
@@ -89,8 +90,8 @@ export const CartProvider = ({ children }) => {
       (variant) => formatId(variant.id) === variantId
     );
 
-    // Update cartItems state
-    setCartItems((prevItems) => {
+    // Update initialItems state
+    setInitialItems((prevItems) => {
       // If there is no item in the cart with the product id then create an item
       if (prevItems.find((item) => item.productId === productId) == null) {
         return [
@@ -131,7 +132,7 @@ export const CartProvider = ({ children }) => {
 
     // Variant id
     const variantId =
-      cartItems.find((item) => item.productId === productId)?.variantId ||
+      initialItems.find((item) => item.productId === productId)?.variantId ||
       formatId(product.variants[0].id);
 
     // Get variant price with variant id
@@ -139,7 +140,7 @@ export const CartProvider = ({ children }) => {
       (variant) => formatId(variant.id) === variantId
     ).price;
 
-    setCartItems((prevItems) => {
+    setInitialItems((prevItems) => {
       return prevItems.map((item) => {
         // If the item the item id matches with the provided id then update the price and quantity
         if (item.productId === productId) {
@@ -157,9 +158,20 @@ export const CartProvider = ({ children }) => {
   };
 
   // Add items to local storage
-  const addToCart = () => {
+  const addToCart = (product) => {
+    const productId = formatId(product.id);
+
+    const previousItems = JSON.parse(localStorage.getItem("initialItems"));
+
     // Set cart items to local storage
-    localStorage.setItem("cartItems", JSON.stringify(cartItems));
+    if (previousItems) {
+      localStorage.setItem(
+        "initialItems",
+        JSON.stringify([...previousItems, ...initialItems])
+      );
+    } else {
+      localStorage.setItem("initialItems", JSON.stringify(initialItems));
+    }
 
     // Get carItems and cartQuantity and update the states
     getCartItemsAndQuantity();
@@ -176,6 +188,7 @@ export const CartProvider = ({ children }) => {
   return (
     <CartContext.Provider
       value={{
+        initialItems,
         cartItems,
         cartQuantity,
         getCartItemsAndQuantity,

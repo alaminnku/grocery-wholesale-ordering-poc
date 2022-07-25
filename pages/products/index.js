@@ -9,7 +9,7 @@ import styles from "@styles/products/products.module.css";
 const ProductsPage = ({ products }) => {
   // Hooks
   const {
-    cartItems,
+    initialItems,
     changeVariant,
     increaseQuantity,
     decreaseQuantity,
@@ -18,7 +18,7 @@ const ProductsPage = ({ products }) => {
 
   // Cart item
   const item = (productId) => {
-    return cartItems.find((item) => item.productId === productId);
+    return initialItems.find((item) => item.productId === productId);
   };
 
   return (
@@ -65,7 +65,7 @@ const ProductsPage = ({ products }) => {
               parseFloat(product.variants[0].price)}
           </p>
 
-          <button onClick={addToCart}>Add to Cart</button>
+          <button onClick={() => addToCart(product)}>Add to Cart</button>
         </div>
       ))}
     </div>
