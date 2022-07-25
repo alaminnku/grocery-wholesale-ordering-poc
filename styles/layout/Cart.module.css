@@ -37,3 +37,20 @@
   border-radius: 50%;
   cursor: pointer;
 }
+
+.Item {
+  display: flex;
+  align-items: center;
+  padding: 1rem 0rem;
+}
+
+.Image {
+  width: 30%;
+  border: 1px solid red;
+  margin-right: 1rem;
+}
+
+.Content {
+  width: 70%;
+  border: 1px solid red;
+}
