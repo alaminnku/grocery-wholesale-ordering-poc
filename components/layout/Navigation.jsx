@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useCart } from "@contexts/CartContext";
 import { MdOutlineShoppingCart } from "react-icons/md";
 import Cart from "@components/layout/Cart";
@@ -7,7 +7,13 @@ import styles from "@styles/layout/Navigation.module.css";
 const Navigation = () => {
   // Hooks
   const [isOpen, setIsOpen] = useState(false);
-  const { cartQuantity } = useCart();
+  const { getCartItems, calculateQuantity } = useCart();
+  const cartQuantity = calculateQuantity();
+
+  // Get cart items from local storage
+  useEffect(() => {
+    getCartItems();
+  }, []);
 
   return (
     <nav className={styles.Navigation}>

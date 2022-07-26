@@ -11,20 +11,21 @@ export const useCart = () => useContext(CartContext);
 export const CartProvider = ({ children }) => {
   const [initialItems, setInitialItems] = useState([]);
   const [cartItems, setCartItems] = useState([]);
-  const [cartQuantity, setCartQuantity] = useState(null);
 
-  // Get cart items and quantity from local storage
-  const getCartItemsAndQuantity = () => {
-    const items = JSON.parse(localStorage.getItem("initialItems"));
+  // Get cart items local storage
+  const getCartItems = () => {
+    // Get items from local storage
+    const items = JSON.parse(localStorage.getItem("cartItems"));
 
-    // Update cartItems and cartQuantity state
+    // Update cartItems state
     setCartItems((prevItems) => items || prevItems);
+  };
 
-    setCartQuantity(
-      items?.reduce(
-        (quantity, currentItem) => quantity + currentItem.quantity,
-        0
-      )
+  // Calculate total quantity
+  const calculateQuantity = () => {
+    return cartItems.reduce(
+      (quantity, currItem) => quantity + currItem.quantity,
+      0
     );
   };
 
@@ -161,20 +162,40 @@ export const CartProvider = ({ children }) => {
   const addToCart = (product) => {
     const productId = formatId(product.id);
 
-    const previousItems = JSON.parse(localStorage.getItem("initialItems"));
+    // Item to add to cart
+    const newItem = initialItems.find(
+      (initialItem) => initialItem.productId === productId
+    );
 
-    // Set cart items to local storage
-    if (previousItems) {
-      localStorage.setItem(
-        "initialItems",
-        JSON.stringify([...previousItems, ...initialItems])
-      );
-    } else {
-      localStorage.setItem("initialItems", JSON.stringify(initialItems));
-    }
-
-    // Get carItems and cartQuantity and update the states
-    getCartItemsAndQuantity();
+    // Add and update items in cartItems
+    setCartItems((prevItems) => {
+      // Add the newItem to cart if the variant doesn't exist
+      if (
+        prevItems.find(
+          (cartItem) => cartItem.variantId === newItem.variantId
+        ) == null
+      ) {
+        return [...prevItems, newItem];
+      } else {
+        // Update the item
+        return prevItems.map((prevItem) => {
+          // Update the quantity and price if the product and variant match
+          if (
+            prevItem.productId === productId &&
+            prevItem.variantId == newItem.variantId
+          ) {
+            return {
+              ...prevItem,
+              quantity: newItem.quantity,
+              price: (newItem.quantity + 1) * prevItem.price,
+            };
+          } else {
+            // Return the item as it is if the product and variant don't match
+            return prevItem;
+          }
+        });
+      }
+    });
   };
 
   // Remove item from cart
@@ -190,8 +211,8 @@ export const CartProvider = ({ children }) => {
       value={{
         initialItems,
         cartItems,
-        cartQuantity,
-        getCartItemsAndQuantity,
+        getCartItems,
+        calculateQuantity,
         changeVariant,
         increaseQuantity,
         decreaseQuantity,

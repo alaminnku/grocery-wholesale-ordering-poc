@@ -6,12 +6,15 @@ import { AiOutlinePlus, AiOutlineMinus } from "react-icons/ai";
 import styles from "@styles/layout/Cart.module.css";
 
 const Cart = ({ isOpen, setIsOpen }) => {
-  const { cartItems, cartQuantity, getCartItemsAndQuantity } = useCart();
+  const { cartItems, calculateQuantity } = useCart();
+  const cartQuantity = calculateQuantity();
 
-  // Get cart items from local storage
+  // Save cart items to local storage
   useEffect(() => {
-    getCartItemsAndQuantity();
-  }, []);
+    if (cartItems.length > 0) {
+      localStorage.setItem("cartItems", JSON.stringify(cartItems));
+    }
+  }, [cartItems]);
 
   return (
     <>
@@ -32,7 +35,7 @@ const Cart = ({ isOpen, setIsOpen }) => {
 
         <div>
           {cartItems.map((item) => (
-            <div key={item.productId * item.price} className={styles.Item}>
+            <div key={item.variantId} className={styles.Item}>
               <div className={styles.Image}>
                 <Image
                   src={item.variantImage}
