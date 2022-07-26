@@ -3,10 +3,11 @@ import Image from "next/image";
 import { useCart } from "@contexts/CartContext";
 import { IoCloseOutline } from "react-icons/io5";
 import { AiOutlinePlus, AiOutlineMinus } from "react-icons/ai";
+import { RiDeleteBin5Line } from "react-icons/ri";
 import styles from "@styles/layout/Cart.module.css";
 
 const Cart = ({ isOpen, setIsOpen }) => {
-  const { cartItems, calculateQuantity } = useCart();
+  const { cartItems, calculateQuantity, removeFromCart } = useCart();
   const cartQuantity = calculateQuantity();
 
   // Save cart items to local storage
@@ -54,9 +55,15 @@ const Cart = ({ isOpen, setIsOpen }) => {
                   <p>${item.price}</p>
                 </div>
               </div>
+              <div>
+                <RiDeleteBin5Line
+                  onClick={() => removeFromCart(item.variantId)}
+                />
+              </div>
             </div>
           ))}
         </div>
+        <button>Checkout</button>
       </div>
     </>
   );

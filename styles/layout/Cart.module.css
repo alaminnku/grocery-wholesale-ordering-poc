@@ -48,11 +48,9 @@
 
 .Image {
   width: 30%;
-  border: 1px solid red;
   margin-right: 1rem;
 }
 
 .Content {
   width: 70%;
-  border: 1px solid red;
 }

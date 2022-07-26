@@ -199,10 +199,10 @@ export const CartProvider = ({ children }) => {
   };
 
   // Remove item from cart
-  const removeFromCart = (id) => {
+  const removeFromCart = (variantId) => {
     setCartItems((prevItems) => {
       // Return all the items which has a different id than the provided it
-      return prevItems.filter((item) => item.id !== id);
+      return prevItems.filter((item) => item.variantId !== variantId);
     });
   };
 

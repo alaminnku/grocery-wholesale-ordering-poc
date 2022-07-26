@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import { useCart } from "@contexts/CartContext";
 import { MdOutlineShoppingCart } from "react-icons/md";
 import Cart from "@components/layout/Cart";
@@ -18,10 +19,14 @@ const Navigation = () => {
   return (
     <nav className={styles.Navigation}>
       <div>
-        <p>Logo</p>
+        <Link href="/">
+          <a>Home</a>
+        </Link>
       </div>
       <ul>
-        <li>Products</li>
+        <Link href="/products">
+          <a>Products</a>
+        </Link>
         <li onClick={() => setIsOpen(true)}>
           {cartQuantity > 0 && <span>{cartQuantity}</span>}
           <MdOutlineShoppingCart />
