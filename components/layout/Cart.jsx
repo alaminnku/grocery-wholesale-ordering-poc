@@ -7,15 +7,28 @@ import { RiDeleteBin5Line } from "react-icons/ri";
 import styles from "@styles/layout/Cart.module.css";
 
 const Cart = ({ isOpen, setIsOpen }) => {
-  const { cartItems, calculateQuantity, removeFromCart } = useCart();
-  const cartQuantity = calculateQuantity();
+  const [cartItems, setCartItems] = useState([]);
+  const { cartUpdated, setCartUpdated, calculateQuantity } = useCart();
+  const cartQuantity = calculateQuantity(cartItems);
 
-  // Save cart items to local storage
+  // Get items from local storage when total items changes
   useEffect(() => {
-    if (cartItems.length > 0) {
-      localStorage.setItem("cartItems", JSON.stringify(cartItems));
-    }
-  }, [cartItems]);
+    setCartItems(JSON.parse(localStorage.getItem("cart-items")) || []);
+  }, [cartUpdated]);
+
+  // Remove cart item
+  const removeCartItem = (variantId) => {
+    // Filter the items by variant id
+    const filteredItems = cartItems.filter(
+      (item) => item.variantId !== variantId
+    );
+
+    // Set updated items to local storage
+    localStorage.setItem("cart-items", JSON.stringify(filteredItems));
+
+    // Update cartUpdated state
+    setCartUpdated(!cartUpdated);
+  };
 
   return (
     <>
@@ -57,7 +70,7 @@ const Cart = ({ isOpen, setIsOpen }) => {
               </div>
               <div>
                 <RiDeleteBin5Line
-                  onClick={() => removeFromCart(item.variantId)}
+                  onClick={() => removeCartItem(item.variantId)}
                 />
               </div>
             </div>
