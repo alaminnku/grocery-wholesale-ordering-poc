@@ -13,7 +13,7 @@ const ProductsPage = ({ products }) => {
     changeVariant,
     increaseQuantity,
     decreaseQuantity,
-    addToCart,
+    addItemToCart,
   } = useCart();
 
   // Cart item
@@ -65,7 +65,7 @@ const ProductsPage = ({ products }) => {
               parseFloat(product.variants[0].price)}
           </p>
 
-          <button onClick={() => addToCart(product)}>Add to Cart</button>
+          <button onClick={() => addItemToCart(product)}>Add to Cart</button>
         </div>
       ))}
     </div>

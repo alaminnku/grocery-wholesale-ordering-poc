@@ -7,9 +7,7 @@ import styles from "@styles/layout/Navigation.module.css";
 
 const Navigation = () => {
   // Hooks
-  const [isOpen, setIsOpen] = useState(false);
-  const { cartItems, calculateQuantity } = useCart();
-  const cartQuantity = calculateQuantity(cartItems);
+  const { setIsOpen, cartQuantity } = useCart();
 
   return (
     <nav className={styles.Navigation}>
@@ -27,7 +25,7 @@ const Navigation = () => {
           <MdOutlineShoppingCart />
         </li>
       </ul>
-      <Cart isOpen={isOpen} setIsOpen={setIsOpen} />
+      {/* <Cart isOpen={isOpen} setIsOpen={setIsOpen} /> */}
     </nav>
   );
 };

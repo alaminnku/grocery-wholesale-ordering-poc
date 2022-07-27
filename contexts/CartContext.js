@@ -1,5 +1,6 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useState, useEffect } from "react";
 import { formatId } from "@utils/formatId";
+import Cart from "@components/layout/Cart";
 
 // Cart context
 const CartContext = createContext();
@@ -11,14 +12,13 @@ export const useCart = () => useContext(CartContext);
 export const CartProvider = ({ children }) => {
   const [initialItems, setInitialItems] = useState([]);
   const [cartItems, setCartItems] = useState([]);
+  const [isOpen, setIsOpen] = useState(false);
 
-  // Calculate total quantity
-  const calculateQuantity = (cartItems) => {
-    return cartItems.reduce(
-      (quantity, currItem) => quantity + currItem.quantity,
-      0
-    );
-  };
+  // Cart quantity
+  const cartQuantity = cartItems.reduce(
+    (quantity, currItem) => quantity + currItem.quantity,
+    0
+  );
 
   //  Change variant
   const changeVariant = (product, variantId) => {
@@ -149,8 +149,8 @@ export const CartProvider = ({ children }) => {
     });
   };
 
-  // Add items to local storage
-  const addToCart = (product) => {
+  // Add items to cart
+  const addItemToCart = (product) => {
     // Cart items
     const cartItems = [];
 
@@ -223,7 +223,7 @@ export const CartProvider = ({ children }) => {
   };
 
   // Remove cart item
-  const removeCartItem = (variantId) => {
+  const removeItemFromCart = (variantId) => {
     // Filter the items by variant id
     const filteredItems = cartItems.filter(
       (item) => item.variantId !== variantId
@@ -241,16 +241,19 @@ export const CartProvider = ({ children }) => {
       value={{
         initialItems,
         cartItems,
+        isOpen,
+        setIsOpen,
+        cartQuantity,
         setCartItems,
-        calculateQuantity,
         changeVariant,
         increaseQuantity,
         decreaseQuantity,
-        addToCart,
-        removeCartItem,
+        addItemToCart,
+        removeItemFromCart,
       }}
     >
       {children}
+      <Cart isOpen={isOpen} setIsOpen={setIsOpen} />
     </CartContext.Provider>
   );
 };

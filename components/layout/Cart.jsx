@@ -7,11 +7,10 @@ import { RiDeleteBin5Line } from "react-icons/ri";
 import styles from "@styles/layout/Cart.module.css";
 
 const Cart = ({ isOpen, setIsOpen }) => {
-  const { cartItems, setCartItems, calculateQuantity, removeCartItem } =
+  const { cartItems, setCartItems, cartQuantity, removeItemFromCart } =
     useCart();
-  const cartQuantity = calculateQuantity(cartItems);
 
-  // Get items from local storage when total items changes
+  // Get items from local storage when this component mounts
   useEffect(() => {
     setCartItems(JSON.parse(localStorage.getItem("cart-items")) || []);
   }, []);
@@ -56,7 +55,7 @@ const Cart = ({ isOpen, setIsOpen }) => {
               </div>
               <div>
                 <RiDeleteBin5Line
-                  onClick={() => removeCartItem(item.variantId)}
+                  onClick={() => removeItemFromCart(item.variantId)}
                 />
               </div>
             </div>
