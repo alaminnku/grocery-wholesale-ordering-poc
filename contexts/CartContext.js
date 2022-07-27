@@ -10,8 +10,7 @@ export const useCart = () => useContext(CartContext);
 // Cart provider
 export const CartProvider = ({ children }) => {
   const [initialItems, setInitialItems] = useState([]);
-  const [totalItems, setTotalItems] = useState([]);
-  const [cartUpdated, setCartUpdated] = useState(false);
+  const [cartItems, setCartItems] = useState([]);
 
   // Calculate total quantity
   const calculateQuantity = (cartItems) => {
@@ -219,31 +218,36 @@ export const CartProvider = ({ children }) => {
     // Set cart items to local storage
     localStorage.setItem("cart-items", JSON.stringify(cartItems));
 
-    // Update total items
-    setCartUpdated(!cartUpdated);
+    // Update cart items
+    setCartItems(cartItems);
   };
 
-  // Remove item from cart
-  const removeFromCart = (variantId) => {
-    setCartItems((prevItems) => {
-      // Return all the items which has a different id than the provided id
-      return prevItems.filter((item) => item.variantId !== variantId);
-    });
+  // Remove cart item
+  const removeCartItem = (variantId) => {
+    // Filter the items by variant id
+    const filteredItems = cartItems.filter(
+      (item) => item.variantId !== variantId
+    );
+
+    // Set updated items to local storage
+    localStorage.setItem("cart-items", JSON.stringify(filteredItems));
+
+    // Update cartUpdated state
+    setCartItems(filteredItems);
   };
 
   return (
     <CartContext.Provider
       value={{
         initialItems,
-        totalItems,
-        cartUpdated,
-        setCartUpdated,
+        cartItems,
+        setCartItems,
         calculateQuantity,
         changeVariant,
         increaseQuantity,
         decreaseQuantity,
         addToCart,
-        removeFromCart,
+        removeCartItem,
       }}
     >
       {children}

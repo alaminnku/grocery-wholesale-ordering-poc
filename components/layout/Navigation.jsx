@@ -8,14 +8,8 @@ import styles from "@styles/layout/Navigation.module.css";
 const Navigation = () => {
   // Hooks
   const [isOpen, setIsOpen] = useState(false);
-  const { cartUpdated, calculateQuantity } = useCart();
-  const [cartItems, setCartItems] = useState([]);
+  const { cartItems, calculateQuantity } = useCart();
   const cartQuantity = calculateQuantity(cartItems);
-
-  // Get items from local storage when total items changes
-  useEffect(() => {
-    setCartItems(JSON.parse(localStorage.getItem("cart-items")) || []);
-  }, [cartUpdated]);
 
   return (
     <nav className={styles.Navigation}>
