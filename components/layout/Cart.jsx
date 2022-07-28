@@ -1,14 +1,11 @@
-import { useRouter } from "next/router";
 import Image from "next/image";
 import { useCart } from "@contexts/CartContext";
-import { shopifyClient } from "@utils/shopify";
 import { AiOutlinePlus, AiOutlineMinus } from "react-icons/ai";
 import { IoCloseOutline } from "react-icons/io5";
 import styles from "@styles/layout/Cart.module.css";
 
 const Cart = ({ isOpen }) => {
   // Hooks
-  const router = useRouter();
   const {
     closeCart,
     cartItems,
@@ -17,31 +14,8 @@ const Cart = ({ isOpen }) => {
     increaseVariantQuantity,
     decreaseVariantQuantity,
     removeItemFromCart,
+    checkoutCart,
   } = useCart();
-
-  // Handle checkout
-  const handleCheckout = async () => {
-    // Create a checkout
-    const createCheckout = await shopifyClient.checkout.create();
-
-    // Checkout Id
-    const checkoutId = createCheckout.id;
-
-    // Line items / items
-    const lineItemsToAdd = cartItems.map((cartItem) => ({
-      variantId: `gid://shopify/ProductVariant/${cartItem.variantId}`,
-      quantity: cartItem.quantity,
-    }));
-
-    // Add items to check out
-    const checkout = await shopifyClient.checkout.addLineItems(
-      checkoutId,
-      lineItemsToAdd
-    );
-
-    // Push to shopify checkout page
-    router.push(checkout.webUrl);
-  };
 
   return (
     <div>
@@ -110,7 +84,7 @@ const Cart = ({ isOpen }) => {
             </div>
           ))}
         </div>
-        <button className={styles.Checkout} onClick={handleCheckout}>
+        <button className={styles.Checkout} onClick={checkoutCart}>
           Checkout Now (${totalCartPrice})
         </button>
       </div>

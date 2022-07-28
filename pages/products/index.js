@@ -5,13 +5,17 @@ import { formatId } from "@utils/formatId";
 import { useCart } from "@contexts/CartContext";
 import { AiOutlinePlus, AiOutlineMinus } from "react-icons/ai";
 import styles from "@styles/products/products.module.css";
-import { useProducts } from "@contexts/ProductsContext";
+import { useProduct } from "@contexts/ProductContext";
 
 const ProductsPage = ({ products }) => {
   // Hooks
   const { addItemToCart } = useCart();
-  const { currProduct, changeVariant, increaseQuantity, decreaseQuantity } =
-    useProducts();
+  const {
+    currentProduct,
+    changeProductVariant,
+    increaseProductQuantity,
+    decreaseProductQuantity,
+  } = useProduct();
 
   return (
     <div className={styles.Products}>
@@ -31,7 +35,9 @@ const ProductsPage = ({ products }) => {
           </Link>
 
           {/* Product variant options */}
-          <select onChange={(e) => changeVariant(product, e.target.value)}>
+          <select
+            onChange={(e) => changeProductVariant(product, e.target.value)}
+          >
             {product.variants.map((variant) => (
               <option key={formatId(variant.id)} value={formatId(variant.id)}>
                 {variant.title}
@@ -40,20 +46,20 @@ const ProductsPage = ({ products }) => {
           </select>
 
           {/* Increase quantity button */}
-          <AiOutlinePlus onClick={() => increaseQuantity(product)} />
+          <AiOutlinePlus onClick={() => increaseProductQuantity(product)} />
 
           {/* Quantity */}
-          <span>{currProduct(product.id)?.quantity}</span>
+          <span>{currentProduct(product.id)?.quantity}</span>
 
           {/* Render the minus button if product quantity is more than 1 */}
-          {currProduct(product.id)?.quantity > 1 && (
-            <AiOutlineMinus onClick={() => decreaseQuantity(product)} />
+          {currentProduct(product.id)?.quantity > 1 && (
+            <AiOutlineMinus onClick={() => decreaseProductQuantity(product)} />
           )}
 
           {/* Render cart item price or initial price */}
           <p>
             AUD $
-            {currProduct(product.id)?.price ||
+            {currentProduct(product.id)?.price ||
               parseFloat(product.variants[0].price)}
           </p>
 

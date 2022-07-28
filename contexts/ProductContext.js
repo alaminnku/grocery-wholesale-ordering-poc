@@ -1,15 +1,18 @@
 import { createContext, useContext, useState } from "react";
 import { formatId } from "@utils/formatId";
 
-const ProductsContext = createContext();
+// Product context
+const ProductContext = createContext();
 
-export const useProducts = () => useContext(ProductsContext);
+// Use product hook
+export const useProduct = () => useContext(ProductContext);
 
-export const ProductsProvider = ({ children }) => {
+// Product provider
+export const ProductProvider = ({ children }) => {
   const [initialProducts, setInitialProducts] = useState([]);
 
   // Current item
-  const currProduct = (rawId) => {
+  const currentProduct = (rawId) => {
     const productId = formatId(rawId);
 
     // Return the product that matches the id
@@ -17,7 +20,7 @@ export const ProductsProvider = ({ children }) => {
   };
 
   //  Change variant
-  const changeVariant = (product, variantId) => {
+  const changeProductVariant = (product, variantId) => {
     // Product id
     const productId = formatId(product.id);
 
@@ -64,7 +67,7 @@ export const ProductsProvider = ({ children }) => {
   };
 
   // Increase quantity
-  const increaseQuantity = (product) => {
+  const increaseProductQuantity = (product) => {
     // Product id
     const productId = formatId(product.id);
 
@@ -114,7 +117,7 @@ export const ProductsProvider = ({ children }) => {
   };
 
   // Decrease quantity
-  const decreaseQuantity = (product) => {
+  const decreaseProductQuantity = (product) => {
     // Product id
     const productId = formatId(product.id);
 
@@ -146,16 +149,16 @@ export const ProductsProvider = ({ children }) => {
   };
 
   return (
-    <ProductsContext.Provider
+    <ProductContext.Provider
       value={{
-        currProduct,
+        currentProduct,
         initialProducts,
-        changeVariant,
-        increaseQuantity,
-        decreaseQuantity,
+        changeProductVariant,
+        increaseProductQuantity,
+        decreaseProductQuantity,
       }}
     >
       {children}
-    </ProductsContext.Provider>
+    </ProductContext.Provider>
   );
 };

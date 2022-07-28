@@ -1,7 +1,9 @@
 import { createContext, useContext, useState, useEffect } from "react";
+import { useRouter } from "next/router";
+import { shopifyClient } from "@utils/shopify";
 import { formatId } from "@utils/formatId";
 import Cart from "@components/layout/Cart";
-import { useProducts } from "./ProductsContext";
+import { useProduct } from "./ProductContext";
 
 // Cart context
 const CartContext = createContext();
@@ -11,10 +13,11 @@ export const useCart = () => useContext(CartContext);
 
 // Cart provider
 export const CartProvider = ({ children }) => {
-  // const [initialItems, setInitialItems] = useState([]);
+  // Hooks
+  const router = useRouter();
   const [cartItems, setCartItems] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
-  const { initialProducts } = useProducts();
+  const { initialProducts } = useProduct();
 
   // Get items from local storage on app reload
   useEffect(() => {
@@ -168,6 +171,30 @@ export const CartProvider = ({ children }) => {
     setCartItems(filteredItems);
   };
 
+  // Handle checkout
+  const checkoutCart = async () => {
+    // Create a checkout
+    const createCheckout = await shopifyClient.checkout.create();
+
+    // Checkout Id
+    const checkoutId = createCheckout.id;
+
+    // Line items / items
+    const lineItemsToAdd = cartItems.map((cartItem) => ({
+      variantId: `gid://shopify/ProductVariant/${cartItem.variantId}`,
+      quantity: cartItem.quantity,
+    }));
+
+    // Add items to check out
+    const checkout = await shopifyClient.checkout.addLineItems(
+      checkoutId,
+      lineItemsToAdd
+    );
+
+    // Push to shopify checkout page
+    router.push(checkout.webUrl);
+  };
+
   return (
     <CartContext.Provider
       value={{
@@ -180,6 +207,7 @@ export const CartProvider = ({ children }) => {
         increaseVariantQuantity,
         decreaseVariantQuantity,
         removeItemFromCart,
+        checkoutCart,
       }}
     >
       {children}

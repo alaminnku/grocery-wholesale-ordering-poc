@@ -1,16 +1,16 @@
-import { ProductsProvider } from "@contexts/ProductsContext";
+import { ProductProvider } from "@contexts/ProductContext";
 import { CartProvider } from "@contexts/CartContext";
 import Navigation from "@components/layout/Navigation";
 import "@styles/globals.css";
 
 const MyApp = ({ Component, pageProps }) => {
   return (
-    <ProductsProvider>
+    <ProductProvider>
       <CartProvider>
         <Navigation />
         <Component {...pageProps} />
       </CartProvider>
-    </ProductsProvider>
+    </ProductProvider>
   );
 };
 
