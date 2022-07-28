@@ -9,17 +9,12 @@ import styles from "@styles/products/products.module.css";
 const ProductsPage = ({ products }) => {
   // Hooks
   const {
-    initialItems,
+    currItem,
     changeVariant,
     increaseQuantity,
     decreaseQuantity,
     addItemToCart,
   } = useCart();
-
-  // Cart item
-  const item = (productId) => {
-    return initialItems.find((item) => item.productId === productId);
-  };
 
   return (
     <div className={styles.Products}>
@@ -51,21 +46,21 @@ const ProductsPage = ({ products }) => {
           <AiOutlinePlus onClick={() => increaseQuantity(product)} />
 
           {/* Quantity */}
-          <span>{item(formatId(product.id))?.quantity}</span>
+          <span>{currItem(product.id)?.quantity}</span>
 
           {/* Render the minus button if product quantity is more than 1 */}
-          {item(formatId(product.id))?.quantity > 1 && (
+          {currItem(product.id)?.quantity > 1 && (
             <AiOutlineMinus onClick={() => decreaseQuantity(product)} />
           )}
 
           {/* Render cart item price or initial price */}
           <p>
             AUD $
-            {item(formatId(product.id))?.price ||
+            {currItem(product.id)?.price ||
               parseFloat(product.variants[0].price)}
           </p>
 
-          <button onClick={() => addItemToCart(product)}>Add to Cart</button>
+          <button onClick={() => addItemToCart(product.id)}>Add to Cart</button>
         </div>
       ))}
     </div>

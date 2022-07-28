@@ -14,11 +14,28 @@ export const CartProvider = ({ children }) => {
   const [cartItems, setCartItems] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
 
+  // Get items from local storage on app reload
+  useEffect(() => {
+    setCartItems(JSON.parse(localStorage.getItem("cart-items")) || []);
+  }, []);
+
+  // Cart open and close functions
+  const openCart = () => setIsOpen(true);
+  const closeCart = () => setIsOpen(false);
+
   // Cart quantity
   const cartQuantity = cartItems.reduce(
     (quantity, currItem) => quantity + currItem.quantity,
     0
   );
+
+  // Current item
+  const currItem = (rawId) => {
+    const productId = formatId(rawId);
+
+    // Return the product that matches the id
+    return initialItems.find((item) => item.productId === productId);
+  };
 
   //  Change variant
   const changeVariant = (product, variantId) => {
@@ -150,12 +167,12 @@ export const CartProvider = ({ children }) => {
   };
 
   // Add items to cart
-  const addItemToCart = (product) => {
+  const addItemToCart = (rawId) => {
     // Cart items
     const cartItems = [];
 
     // Product id
-    const productId = formatId(product.id);
+    const productId = formatId(rawId);
 
     // New item
     const currItem = initialItems.find(
@@ -239,12 +256,11 @@ export const CartProvider = ({ children }) => {
   return (
     <CartContext.Provider
       value={{
-        initialItems,
+        currItem,
         cartItems,
-        isOpen,
-        setIsOpen,
+        openCart,
+        closeCart,
         cartQuantity,
-        setCartItems,
         changeVariant,
         increaseQuantity,
         decreaseQuantity,
@@ -253,7 +269,7 @@ export const CartProvider = ({ children }) => {
       }}
     >
       {children}
-      <Cart isOpen={isOpen} setIsOpen={setIsOpen} />
+      <Cart isOpen={isOpen} />
     </CartContext.Provider>
   );
 };
