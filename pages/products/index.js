@@ -1,11 +1,11 @@
 import Link from "next/link";
 import Image from "next/image";
+import { useCart } from "@contexts/CartContext";
+import { useProduct } from "@contexts/ProductContext";
 import { shopifyClient } from "@utils/shopify";
 import { formatId } from "@utils/formatId";
-import { useCart } from "@contexts/CartContext";
 import { AiOutlinePlus, AiOutlineMinus } from "react-icons/ai";
 import styles from "@styles/products/products.module.css";
-import { useProduct } from "@contexts/ProductContext";
 
 const ProductsPage = ({ products }) => {
   // Hooks

@@ -1,9 +1,9 @@
 import { createContext, useContext, useState, useEffect } from "react";
 import { useRouter } from "next/router";
+import { useProduct } from "./ProductContext";
 import { shopifyClient } from "@utils/shopify";
 import { formatId } from "@utils/formatId";
 import Cart from "@components/layout/Cart";
-import { useProduct } from "./ProductContext";
 
 // Cart context
 const CartContext = createContext();
@@ -86,6 +86,8 @@ export const CartProvider = ({ children }) => {
 
           // If current variant exists in the previous items
         } else {
+          // Update the variant's quantity and price if currItem's
+          //productId and variantId match with one of the existing items
           const updatedItems = prevItems.map((prevItem) => {
             if (
               prevItem.productId === currItem.productId &&
@@ -97,10 +99,13 @@ export const CartProvider = ({ children }) => {
                 price: (currItem.quantity + 1) * prevItem.price,
               };
             } else {
+              //if currItem's productId and variantId don't match
+              // with one of the previous items then return the prevItem
               return prevItem;
             }
           });
 
+          // Push the updated items to cartItems
           cartItems.push(...updatedItems);
         }
       }
