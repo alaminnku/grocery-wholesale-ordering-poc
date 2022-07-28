@@ -13,7 +13,7 @@
   position: absolute;
   top: 0;
   right: -100%;
-  width: 30vw;
+  width: 35vw;
   height: 100vh;
   background-color: white;
   padding: 0.5rem 1.5rem;
@@ -29,6 +29,8 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  padding: 1rem 0rem;
+  border-bottom: 1px solid rgb(233, 233, 233);
 }
 
 .CartHeader svg {
@@ -43,14 +45,73 @@
 .Item {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   padding: 1rem 0rem;
+  border-bottom: 1px solid rgb(233, 233, 233);
+}
+
+.Quantity {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-right: 1rem;
+}
+
+.Quantity p {
+  padding: 0.5rem 0rem;
+}
+
+.Quantity svg {
+  width: 1.5rem;
+  height: 1.5rem;
+  padding: 0.3rem;
+  border: 1px solid grey;
+  color: grey;
+  border-radius: 50%;
+}
+
+.Quantity .Plus {
+  border: 1px solid red;
+  color: black;
+}
+
+.Quantity .Enabled {
+  border: 1px solid red;
+  color: black;
 }
 
 .Image {
-  width: 30%;
+  width: 25%;
   margin-right: 1rem;
 }
 
 .Content {
-  width: 70%;
+  width: 50%;
+  margin-right: 1rem;
+}
+
+.Content p {
+  font-size: 0.8rem;
+}
+
+.Content small {
+  display: block;
+  font-size: 0.7rem;
+  margin: 0.5rem 0rem;
+  color: grey;
+}
+
+.Delete svg {
+  font-size: 1.25rem;
+}
+
+.Checkout {
+  background-color: #177e89;
+  color: white;
+  border: none;
+  padding: 0.75rem 1rem;
+  width: 100%;
+  font-size: 1rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
 }

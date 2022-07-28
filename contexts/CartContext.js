@@ -23,9 +23,15 @@ export const CartProvider = ({ children }) => {
   const openCart = () => setIsOpen(true);
   const closeCart = () => setIsOpen(false);
 
-  // Cart quantity
-  const cartQuantity = cartItems.reduce(
+  // Calculate total quantity
+  const totalQuantity = cartItems.reduce(
     (quantity, currItem) => quantity + currItem.quantity,
+    0
+  );
+
+  // Calculate total price
+  const totalPrice = cartItems.reduce(
+    (price, currItem) => price + currItem.price,
     0
   );
 
@@ -304,7 +310,8 @@ export const CartProvider = ({ children }) => {
         cartItems,
         openCart,
         closeCart,
-        cartQuantity,
+        totalQuantity,
+        totalPrice,
         changeVariant,
         increaseQuantity,
         decreaseQuantity,

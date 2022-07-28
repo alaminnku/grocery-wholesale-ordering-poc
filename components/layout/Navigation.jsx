@@ -7,7 +7,7 @@ import styles from "@styles/layout/Navigation.module.css";
 
 const Navigation = () => {
   // Hooks
-  const { openCart, cartQuantity } = useCart();
+  const { openCart, totalQuantity } = useCart();
 
   return (
     <nav className={styles.Navigation}>
@@ -21,7 +21,7 @@ const Navigation = () => {
           <a>Products</a>
         </Link>
         <li onClick={openCart}>
-          {cartQuantity > 0 && <span>{cartQuantity}</span>}
+          {totalQuantity > 0 && <span>{totalQuantity}</span>}
           <MdOutlineShoppingCart />
         </li>
       </ul>

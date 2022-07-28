@@ -2,9 +2,8 @@ import { useRouter } from "next/router";
 import Image from "next/image";
 import { useCart } from "@contexts/CartContext";
 import { shopifyClient } from "@utils/shopify";
-import { IoCloseOutline } from "react-icons/io5";
 import { AiOutlinePlus, AiOutlineMinus } from "react-icons/ai";
-import { RiDeleteBin5Line } from "react-icons/ri";
+import { IoCloseOutline } from "react-icons/io5";
 import styles from "@styles/layout/Cart.module.css";
 
 const Cart = ({ isOpen }) => {
@@ -13,7 +12,8 @@ const Cart = ({ isOpen }) => {
   const {
     closeCart,
     cartItems,
-    cartQuantity,
+    totalQuantity,
+    totalPrice,
     increaseVariantQuantity,
     decreaseVariantQuantity,
     removeItemFromCart,
@@ -44,7 +44,7 @@ const Cart = ({ isOpen }) => {
   };
 
   return (
-    <>
+    <div>
       <div
         className={`${styles.Overlay} ${isOpen && styles.Open}`}
         onClick={closeCart}
@@ -53,16 +53,34 @@ const Cart = ({ isOpen }) => {
       <div className={`${styles.Cart} ${isOpen && styles.Open}`}>
         <div className={styles.CartHeader}>
           <h3>
-            Your cart <span>({cartQuantity})</span>
+            Your cart <span>({totalQuantity})</span>
           </h3>
           <IoCloseOutline onClick={closeCart} />
         </div>
 
-        <div>{!cartQuantity && <p>Your cart is empty</p>}</div>
+        <div>{!cartItems && <p>Your cart is empty</p>}</div>
 
         <div>
           {cartItems.map((item) => (
             <div key={item.variantId} className={styles.Item}>
+              {/* Quantity */}
+              <div className={styles.Quantity}>
+                <AiOutlinePlus
+                  className={styles.Plus}
+                  onClick={() => increaseVariantQuantity(item.variantId)}
+                />
+
+                <p>{item.quantity}</p>
+
+                <AiOutlineMinus
+                  className={item.quantity > 1 && styles.Enabled}
+                  onClick={() =>
+                    item.quantity > 1 && decreaseVariantQuantity(item.variantId)
+                  }
+                />
+              </div>
+
+              {/* Image */}
               <div className={styles.Image}>
                 <Image
                   src={item.variantImage}
@@ -71,37 +89,32 @@ const Cart = ({ isOpen }) => {
                   layout="responsive"
                 />
               </div>
+
+              {/* Content */}
               <div className={styles.Content}>
-                <div>
-                  <p>{item.name}</p>
-                  <small>Variant: {item.variantName}</small>
-                  <small>{item.quantity}</small>
-                </div>
-                <div>
-                  <p>${item.price}</p>
-                </div>
+                <p>
+                  {item.name} - <span>{item.variantName}</span>
+                </p>
+                <small>
+                  ${item.variantPrice} x {item.quantity}
+                </small>
+                <p>${item.price}</p>
               </div>
-              <div>
-                <RiDeleteBin5Line
+
+              {/* Delete */}
+              <div className={styles.Delete}>
+                <IoCloseOutline
                   onClick={() => removeItemFromCart(item.variantId)}
                 />
               </div>
-
-              {item.quantity > 1 && (
-                <AiOutlineMinus
-                  onClick={() => decreaseVariantQuantity(item.variantId)}
-                />
-              )}
-
-              <AiOutlinePlus
-                onClick={() => increaseVariantQuantity(item.variantId)}
-              />
             </div>
           ))}
         </div>
-        <button onClick={handleCheckout}>Checkout</button>
+        <button className={styles.Checkout} onClick={handleCheckout}>
+          Checkout Now (${totalPrice})
+        </button>
       </div>
-    </>
+    </div>
   );
 };
 
