@@ -12,8 +12,8 @@ const Cart = ({ isOpen }) => {
   const {
     closeCart,
     cartItems,
-    totalQuantity,
-    totalPrice,
+    totalCartPrice,
+    totalCartQuantity,
     increaseVariantQuantity,
     decreaseVariantQuantity,
     removeItemFromCart,
@@ -53,7 +53,7 @@ const Cart = ({ isOpen }) => {
       <div className={`${styles.Cart} ${isOpen && styles.Open}`}>
         <div className={styles.CartHeader}>
           <h3>
-            Your cart <span>({totalQuantity})</span>
+            Your cart <span>({totalCartQuantity})</span>
           </h3>
           <IoCloseOutline onClick={closeCart} />
         </div>
@@ -111,7 +111,7 @@ const Cart = ({ isOpen }) => {
           ))}
         </div>
         <button className={styles.Checkout} onClick={handleCheckout}>
-          Checkout Now (${totalPrice})
+          Checkout Now (${totalCartPrice})
         </button>
       </div>
     </div>

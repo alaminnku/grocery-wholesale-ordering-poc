@@ -2,12 +2,11 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useCart } from "@contexts/CartContext";
 import { MdOutlineShoppingCart } from "react-icons/md";
-import Cart from "@components/layout/Cart";
 import styles from "@styles/layout/Navigation.module.css";
 
 const Navigation = () => {
   // Hooks
-  const { openCart, totalQuantity } = useCart();
+  const { openCart, totalCartQuantity } = useCart();
 
   return (
     <nav className={styles.Navigation}>
@@ -21,7 +20,7 @@ const Navigation = () => {
           <a>Products</a>
         </Link>
         <li onClick={openCart}>
-          {totalQuantity > 0 && <span>{totalQuantity}</span>}
+          {totalCartQuantity > 0 && <span>{totalCartQuantity}</span>}
           <MdOutlineShoppingCart />
         </li>
       </ul>

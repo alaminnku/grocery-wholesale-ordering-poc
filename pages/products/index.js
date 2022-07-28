@@ -5,16 +5,13 @@ import { formatId } from "@utils/formatId";
 import { useCart } from "@contexts/CartContext";
 import { AiOutlinePlus, AiOutlineMinus } from "react-icons/ai";
 import styles from "@styles/products/products.module.css";
+import { useProducts } from "@contexts/ProductsContext";
 
 const ProductsPage = ({ products }) => {
   // Hooks
-  const {
-    currItem,
-    changeVariant,
-    increaseQuantity,
-    decreaseQuantity,
-    addItemToCart,
-  } = useCart();
+  const { addItemToCart } = useCart();
+  const { currProduct, changeVariant, increaseQuantity, decreaseQuantity } =
+    useProducts();
 
   return (
     <div className={styles.Products}>
@@ -46,17 +43,17 @@ const ProductsPage = ({ products }) => {
           <AiOutlinePlus onClick={() => increaseQuantity(product)} />
 
           {/* Quantity */}
-          <span>{currItem(product.id)?.quantity}</span>
+          <span>{currProduct(product.id)?.quantity}</span>
 
           {/* Render the minus button if product quantity is more than 1 */}
-          {currItem(product.id)?.quantity > 1 && (
+          {currProduct(product.id)?.quantity > 1 && (
             <AiOutlineMinus onClick={() => decreaseQuantity(product)} />
           )}
 
           {/* Render cart item price or initial price */}
           <p>
             AUD $
-            {currItem(product.id)?.price ||
+            {currProduct(product.id)?.price ||
               parseFloat(product.variants[0].price)}
           </p>
 

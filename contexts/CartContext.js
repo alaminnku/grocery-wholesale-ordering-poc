@@ -1,6 +1,7 @@
 import { createContext, useContext, useState, useEffect } from "react";
 import { formatId } from "@utils/formatId";
 import Cart from "@components/layout/Cart";
+import { useProducts } from "./ProductsContext";
 
 // Cart context
 const CartContext = createContext();
@@ -10,9 +11,10 @@ export const useCart = () => useContext(CartContext);
 
 // Cart provider
 export const CartProvider = ({ children }) => {
-  const [initialItems, setInitialItems] = useState([]);
+  // const [initialItems, setInitialItems] = useState([]);
   const [cartItems, setCartItems] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
+  const { initialProducts } = useProducts();
 
   // Get items from local storage on app reload
   useEffect(() => {
@@ -24,153 +26,16 @@ export const CartProvider = ({ children }) => {
   const closeCart = () => setIsOpen(false);
 
   // Calculate total quantity
-  const totalQuantity = cartItems.reduce(
+  const totalCartQuantity = cartItems.reduce(
     (quantity, currItem) => quantity + currItem.quantity,
     0
   );
 
   // Calculate total price
-  const totalPrice = cartItems.reduce(
+  const totalCartPrice = cartItems.reduce(
     (price, currItem) => price + currItem.price,
     0
   );
-
-  // Current item
-  const currItem = (rawId) => {
-    const productId = formatId(rawId);
-
-    // Return the product that matches the id
-    return initialItems.find((item) => item.productId === productId);
-  };
-
-  //  Change variant
-  const changeVariant = (product, variantId) => {
-    // Product id
-    const productId = formatId(product.id);
-
-    // Product variant
-    const productVariant = product.variants.find(
-      (variant) => formatId(variant.id) === variantId
-    );
-
-    // Update the initialItems state
-    setInitialItems((prevItems) => {
-      // If there is no item in the cart with the product id then create an item
-      if (prevItems.find((item) => item.productId === productId) == null) {
-        return [
-          ...prevItems,
-          {
-            productId,
-            name: product.title,
-            quantity: 1,
-            variantId,
-            variantName: productVariant.title,
-            variantPrice: parseFloat(productVariant.price),
-            variantImage: productVariant.image.src,
-            price: parseFloat(productVariant.price),
-          },
-        ];
-      } else {
-        // If there is an item in the cart with the product id then update the item
-        return prevItems.map((item) => {
-          if (item.productId === productId) {
-            return {
-              ...item,
-              variantId,
-              variantName: productVariant.title,
-              variantPrice: parseFloat(productVariant.price),
-              variantImage: productVariant.image.src,
-              price: parseFloat(productVariant.price) * item.quantity,
-            };
-          } else {
-            return item;
-          }
-        });
-      }
-    });
-  };
-
-  // Increase quantity
-  const increaseQuantity = (product) => {
-    // Product id
-    const productId = formatId(product.id);
-
-    // Variant id
-    const variantId =
-      initialItems.find((item) => item.productId === productId)?.variantId ||
-      formatId(product.variants[0].id);
-
-    // Product variant
-    const productVariant = product.variants.find(
-      (variant) => formatId(variant.id) === variantId
-    );
-
-    // Update initialItems state
-    setInitialItems((prevItems) => {
-      // If there is no item in the cart with the product id then create an item
-      if (prevItems.find((item) => item.productId === productId) == null) {
-        return [
-          ...prevItems,
-          {
-            productId,
-            name: product.title,
-            quantity: 1,
-            variantId,
-            variantName: productVariant.title,
-            variantPrice: parseFloat(productVariant.price),
-            variantImage: productVariant.image.src,
-            price: parseFloat(productVariant.price),
-          },
-        ];
-      } else {
-        // If there is an item in the cart with the product id then update the cart
-        return prevItems.map((item) => {
-          if (item.productId === productId) {
-            return {
-              ...item,
-              quantity: item.quantity + 1,
-              price: (item.quantity + 1) * parseFloat(productVariant.price),
-            };
-          } else {
-            // If the provided id doesn't match with the item id then return the item
-            return item;
-          }
-        });
-      }
-    });
-  };
-
-  // Decrease quantity
-  const decreaseQuantity = (product) => {
-    // Product id
-    const productId = formatId(product.id);
-
-    // Variant id
-    const variantId =
-      initialItems.find((item) => item.productId === productId)?.variantId ||
-      formatId(product.variants[0].id);
-
-    // Get variant price with variant id
-    const variantPrice = product.variants.find(
-      (variant) => formatId(variant.id) === variantId
-    ).price;
-
-    setInitialItems((prevItems) => {
-      return prevItems.map((item) => {
-        // If the item the item id matches with the provided id then update the price and quantity
-        if (item.productId === productId) {
-          return {
-            ...item,
-            quantity: item.quantity - 1,
-            price: (item.quantity - 1) * variantPrice,
-          };
-        } else {
-          // If the provided id don't match with the item id then return the item
-          return item;
-        }
-      });
-    });
-  };
 
   // Add items to cart
   const addItemToCart = (rawId) => {
@@ -180,9 +45,9 @@ export const CartProvider = ({ children }) => {
     // Product id
     const productId = formatId(rawId);
 
-    // New item
-    const currItem = initialItems.find(
-      (initialItem) => initialItem.productId === productId
+    // Current item
+    const currItem = initialProducts.find(
+      (initialProduct) => initialProduct.productId === productId
     );
 
     // Cart items from local storage
@@ -306,15 +171,11 @@ export const CartProvider = ({ children }) => {
   return (
     <CartContext.Provider
       value={{
-        currItem,
         cartItems,
         openCart,
         closeCart,
-        totalQuantity,
-        totalPrice,
-        changeVariant,
-        increaseQuantity,
-        decreaseQuantity,
+        totalCartQuantity,
+        totalCartPrice,
         addItemToCart,
         increaseVariantQuantity,
         decreaseVariantQuantity,
