@@ -239,6 +239,50 @@ export const CartProvider = ({ children }) => {
     setCartItems(cartItems);
   };
 
+  // Increase variant quantity in cart
+  const increaseVariantQuantity = (variantId) => {
+    // Update the quantity and price
+    const updatedItems = cartItems.map((cartItem) => {
+      if (cartItem.variantId === variantId) {
+        return {
+          ...cartItem,
+          quantity: cartItem.quantity + 1,
+          price: (cartItem.quantity + 1) * cartItem.variantPrice,
+        };
+      } else {
+        return cartItem;
+      }
+    });
+
+    // Set updated items to local storage
+    localStorage.setItem("cart-items", JSON.stringify(updatedItems));
+
+    // Set updated items to cart
+    setCartItems(updatedItems);
+  };
+
+  // Increase variant quantity in cart
+  const decreaseVariantQuantity = (variantId) => {
+    // Update the quantity and price
+    const updatedItems = cartItems.map((cartItem) => {
+      if (cartItem.variantId === variantId) {
+        return {
+          ...cartItem,
+          quantity: cartItem.quantity - 1,
+          price: (cartItem.quantity - 1) * cartItem.variantPrice,
+        };
+      } else {
+        return cartItem;
+      }
+    });
+
+    // Set updated items to local storage
+    localStorage.setItem("cart-items", JSON.stringify(updatedItems));
+
+    // Set updated items to cart
+    setCartItems(updatedItems);
+  };
+
   // Remove cart item
   const removeItemFromCart = (variantId) => {
     // Filter the items by variant id
@@ -265,6 +309,8 @@ export const CartProvider = ({ children }) => {
         increaseQuantity,
         decreaseQuantity,
         addItemToCart,
+        increaseVariantQuantity,
+        decreaseVariantQuantity,
         removeItemFromCart,
       }}
     >

@@ -25,7 +25,6 @@ const Navigation = () => {
           <MdOutlineShoppingCart />
         </li>
       </ul>
-      {/* <Cart isOpen={isOpen} setIsOpen={setIsOpen} /> */}
     </nav>
   );
 };
