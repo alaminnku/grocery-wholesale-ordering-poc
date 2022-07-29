@@ -12,9 +12,9 @@ const ProductsPage = ({ products }) => {
   const { addVariantToCart } = useCart();
   const {
     currentVariant,
-    changeVariant,
-    increaseVariantQuantity,
-    decreaseVariantQuantity,
+    changeProductVariant,
+    increaseProductQuantity,
+    decreaseProductQuantity,
   } = useProduct();
 
   return (
@@ -35,7 +35,9 @@ const ProductsPage = ({ products }) => {
           </Link>
 
           {/* Product variant options */}
-          <select onChange={(e) => changeVariant(product, e.target.value)}>
+          <select
+            onChange={(e) => changeProductVariant(product, e.target.value)}
+          >
             {product.variants.map((variant) => (
               <option key={formatId(variant.id)} value={formatId(variant.id)}>
                 {variant.title}
@@ -44,14 +46,14 @@ const ProductsPage = ({ products }) => {
           </select>
 
           {/* Increase quantity button */}
-          <AiOutlinePlus onClick={() => increaseVariantQuantity(product)} />
+          <AiOutlinePlus onClick={() => increaseProductQuantity(product)} />
 
           {/* Quantity */}
           <span>{currentVariant(product.id)?.quantity}</span>
 
           {/* Render the minus button if product quantity is more than 1 */}
           {currentVariant(product.id)?.quantity > 1 && (
-            <AiOutlineMinus onClick={() => decreaseVariantQuantity(product)} />
+            <AiOutlineMinus onClick={() => decreaseProductQuantity(product)} />
           )}
 
           {/* Render cart item price or initial price */}

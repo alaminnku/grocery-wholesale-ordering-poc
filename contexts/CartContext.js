@@ -17,7 +17,7 @@ export const CartProvider = ({ children }) => {
   const router = useRouter();
   const [cartItems, setCartItems] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
-  const { variants } = useProduct();
+  const { products } = useProduct();
 
   // Get items from local storage on app reload
   useEffect(() => {
@@ -49,7 +49,7 @@ export const CartProvider = ({ children }) => {
     const productId = formatId(rawId);
 
     // Current item
-    const currItem = variants.find(
+    const currItem = products.find(
       (variant) => variant.productId === productId
     );
 

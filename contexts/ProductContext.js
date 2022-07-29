@@ -10,18 +10,18 @@ export const useProduct = () => useContext(ProductContext);
 // Product provider
 export const ProductProvider = ({ children }) => {
   // Variants array
-  const [variants, setVariants] = useState([]);
+  const [products, setProducts] = useState([]);
 
   // Current item
   const currentVariant = (rawId) => {
     const productId = formatId(rawId);
 
     // Return the product that matches the id
-    return variants.find((product) => product.productId === productId);
+    return products.find((product) => product.productId === productId);
   };
 
   //  Change variant
-  const changeVariant = (product, variantId) => {
+  const changeProductVariant = (product, variantId) => {
     // Product id
     const productId = formatId(product.id);
 
@@ -31,13 +31,13 @@ export const ProductProvider = ({ children }) => {
     );
 
     // Update the products state
-    setVariants((prevVariants) => {
+    setProducts((prevProducts) => {
       // If there is no item in the cart with the product id then create an item
       if (
-        !prevVariants.some((prevVariant) => prevVariant.productId === productId)
+        !prevProducts.some((prevProduct) => prevProduct.productId === productId)
       ) {
         return [
-          ...prevVariants,
+          ...prevProducts,
           {
             productId,
             name: product.title,
@@ -51,10 +51,10 @@ export const ProductProvider = ({ children }) => {
         ];
       } else {
         // If there is an variant in the cart with the product id then update the variant
-        return prevVariants.map((prevVariant) => {
-          if (prevVariant.productId === productId) {
+        return prevProducts.map((prevProduct) => {
+          if (prevProduct.productId === productId) {
             return {
-              ...prevVariant,
+              ...prevProduct,
               quantity: 1,
               variantId,
               variantName: productVariant.title,
@@ -63,7 +63,7 @@ export const ProductProvider = ({ children }) => {
               price: parseFloat(productVariant.price),
             };
           } else {
-            return prevVariant;
+            return prevProduct;
           }
         });
       }
@@ -71,13 +71,13 @@ export const ProductProvider = ({ children }) => {
   };
 
   // Increase quantity
-  const increaseVariantQuantity = (product) => {
+  const increaseProductQuantity = (product) => {
     // Product id
     const productId = formatId(product.id);
 
     // Variant id
     const variantId =
-      variants.find((variant) => variant.productId === productId)?.variantId ||
+      products.find((variant) => variant.productId === productId)?.variantId ||
       formatId(product.variants[0].id);
 
     // Product variant
@@ -86,13 +86,13 @@ export const ProductProvider = ({ children }) => {
     );
 
     // Update variants state
-    setVariants((prevVariants) => {
+    setProducts((prevProducts) => {
       // If there is no variant in the cart with the product id then create an item
       if (
-        !prevVariants.some((prevVariant) => prevVariant.productId === productId)
+        !prevProducts.some((prevProduct) => prevProduct.productId === productId)
       ) {
         return [
-          ...prevVariants,
+          ...prevProducts,
           {
             productId,
             name: product.title,
@@ -106,17 +106,17 @@ export const ProductProvider = ({ children }) => {
         ];
       } else {
         // If there is an item in the cart with the product id then update the cart
-        return prevVariants.map((prevVariant) => {
-          if (prevVariant.productId === productId) {
+        return prevProducts.map((prevProduct) => {
+          if (prevProduct.productId === productId) {
             return {
-              ...prevVariant,
-              quantity: prevVariant.quantity + 1,
+              ...prevProduct,
+              quantity: prevProduct.quantity + 1,
               price:
-                (prevVariant.quantity + 1) * parseFloat(productVariant.price),
+                (prevProduct.quantity + 1) * parseFloat(productVariant.price),
             };
           } else {
             // If the provided id doesn't match with the item id then return the item
-            return prevVariant;
+            return prevProduct;
           }
         });
       }
@@ -124,13 +124,13 @@ export const ProductProvider = ({ children }) => {
   };
 
   // Decrease quantity
-  const decreaseVariantQuantity = (product) => {
+  const decreaseProductQuantity = (product) => {
     // Product id
     const productId = formatId(product.id);
 
     // Variant id
     const variantId =
-      variants.find((variant) => variant.productId === productId)?.variantId ||
+      products.find((variant) => variant.productId === productId)?.variantId ||
       formatId(product.variants[0].id);
 
     // Get variant price with variant id
@@ -138,18 +138,18 @@ export const ProductProvider = ({ children }) => {
       (variant) => formatId(variant.id) === variantId
     ).price;
 
-    setVariants((prevVariants) => {
-      return prevVariants.map((prevVariant) => {
-        // If the prevVariant the prevVariant id matches with the provided id then update the price and quantity
-        if (prevVariant.productId === productId) {
+    setProducts((prevProducts) => {
+      return prevProducts.map((prevProduct) => {
+        // If the prevProduct the prevProduct id matches with the provided id then update the price and quantity
+        if (prevProduct.productId === productId) {
           return {
-            ...prevVariant,
-            quantity: prevVariant.quantity - 1,
-            price: (prevVariant.quantity - 1) * variantPrice,
+            ...prevProduct,
+            quantity: prevProduct.quantity - 1,
+            price: (prevProduct.quantity - 1) * variantPrice,
           };
         } else {
-          // If the provided id don't match with the prevVariant id then return the prevVariant
-          return prevVariant;
+          // If the provided id don't match with the prevProduct id then return the prevProduct
+          return prevProduct;
         }
       });
     });
@@ -158,11 +158,11 @@ export const ProductProvider = ({ children }) => {
   return (
     <ProductContext.Provider
       value={{
-        variants,
+        products,
         currentVariant,
-        changeVariant,
-        increaseVariantQuantity,
-        decreaseVariantQuantity,
+        changeProductVariant,
+        increaseProductQuantity,
+        decreaseProductQuantity,
       }}
     >
       {children}

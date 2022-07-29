@@ -5,41 +5,20 @@ import { useCart } from "@contexts/CartContext";
 import { shopifyClient } from "@utils/shopify";
 import { formatId } from "@utils/formatId";
 import { AiOutlinePlus, AiOutlineMinus } from "react-icons/ai";
+import { useProduct } from "@contexts/ProductContext";
 
 const ProductDetailsPage = ({ product }) => {
   // Hooks
-  const router = useRouter();
-  const [itemVariant, setItemVariant] = useState("");
-  const { cartItems, increaseQuantity, decreaseQuantity } = useCart();
-
-  // Find the item with the id and get the quantity
-  const quantity = (id) => cartItems.find((item) => item.id === id)?.quantity;
+  const {
+    currentVariant,
+    changeProductVariant,
+    increaseProductQuantity,
+    decreaseProductQuantity,
+  } = useProduct();
+  const { addVariantToCart } = useCart();
 
   // Image sources
   const imageSources = product.images.map((image) => image.src);
-
-  // Handle checkout
-  const handleCheckout = async () => {
-    const checkout = await shopifyClient.checkout.create();
-    const checkoutId = checkout.id;
-
-    // Line items
-    const lineItemsToAdd = [
-      {
-        variantId: `gid://shopify/ProductVariant/${itemVariant}`,
-        quantity: quantity(formatId(product.id)),
-      },
-    ];
-
-    // Final order
-    const cart = await shopifyClient.checkout.addLineItems(
-      checkoutId,
-      lineItemsToAdd
-    );
-
-    // Push to shopify checkout page
-    router.push(cart.webUrl);
-  };
 
   return (
     <div>
@@ -49,22 +28,25 @@ const ProductDetailsPage = ({ product }) => {
         <Image key={src} src={src} width={16} height={9} layout="responsive" />
       ))}
 
-      <AiOutlinePlus onClick={() => increaseQuantity(formatId(product.id))} />
+      <AiOutlinePlus onClick={() => increaseProductQuantity(product)} />
 
-      <span>{quantity(formatId(product.id))}</span>
+      <span>{currentVariant(product.id)?.quantity}</span>
 
       {/* Render the minus button if product quantity is more than 0 */}
-      {quantity(formatId(product.id)) > 0 && (
-        <AiOutlineMinus
-          onClick={() => decreaseQuantity(formatId(product.id))}
-        />
+
+      {currentVariant(product.id)?.quantity > 1 && (
+        <AiOutlineMinus onClick={() => decreaseProductQuantity(product)} />
       )}
 
+      {/* Render cart item price or initial price */}
+      <p>
+        AUD $
+        {currentVariant(product.id)?.price ||
+          parseFloat(product.variants[0].price)}
+      </p>
+
       {/* Product variant options */}
-      <select onChange={(e) => setItemVariant(e.target.value)}>
-        <option hidden value="Please select a variant">
-          Please select a variant
-        </option>
+      <select onChange={(e) => changeProductVariant(product, e.target.value)}>
         {product.variants.map((variant) => (
           <option key={formatId(variant.id)} value={formatId(variant.id)}>
             {variant.title}
@@ -72,7 +54,7 @@ const ProductDetailsPage = ({ product }) => {
         ))}
       </select>
 
-      <button onClick={handleCheckout}>Checkout</button>
+      <button onClick={() => addVariantToCart(product.id)}>Add to cart</button>
     </div>
   );
 };
