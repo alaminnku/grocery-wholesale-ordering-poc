@@ -42,8 +42,8 @@ export const CartProvider = ({ children }) => {
 
   // Add items to cart
   const addItemToCart = (rawId) => {
-    // Cart items
-    const cartItems = [];
+    // Updated items
+    let updatedItems = [];
 
     // Product id
     const productId = formatId(rawId);
@@ -53,69 +53,41 @@ export const CartProvider = ({ children }) => {
       (initialProduct) => initialProduct.productId === productId
     );
 
-    // Cart items from local storage
-    const prevItems = JSON.parse(localStorage.getItem("cart-items"));
+    // Set the updatedItems
+    // If the current variant isn't in the cart
+    if (
+      cartItems.find((cartItem) => cartItem.variantId === currItem.variantId) ==
+      null
+    ) {
+      // Add the current variant with
+      // any previous variants to the updatedItems
+      updatedItems = [...cartItems, currItem];
 
-    // Update cart items
-    // If there are no previous items
-    if (!prevItems) {
-      // Add current item to the cart
-      cartItems.push(currItem);
-
-      // If there are previous items
+      // If the current variant is in the cart
     } else {
-      // If current item doesn't exist in previous items
-      if (
-        prevItems.find(
-          (prevItem) => prevItem.productId === currItem.productId
-        ) == null
-      ) {
-        // Add current item and previous items to the cart
-        cartItems.push(...prevItems, currItem);
-
-        // If the current item exists in previous items
-      } else {
-        // If current variant doesn't exist in cart
-        if (
-          prevItems.find(
-            (prevItem) => prevItem.variantId === currItem.variantId
-          ) == null
-        ) {
-          // Add current variant to the cart
-          cartItems.push(...prevItems, currItem);
-
-          // If current variant exists in the previous items
+      // Set the updatedItems with updated cartItems
+      updatedItems = cartItems.map((cartItem) => {
+        // Update the item in the cart which has
+        // the same variantId as the currItem variantId
+        if (cartItem.variantId === currItem.variantId) {
+          return {
+            ...cartItem,
+            quantity: currItem.quantity,
+            price: currItem.price,
+          };
         } else {
-          // Update the variant's quantity and price if currItem's
-          //productId and variantId match with one of the existing items
-          const updatedItems = prevItems.map((prevItem) => {
-            if (
-              prevItem.productId === currItem.productId &&
-              prevItem.variantId === currItem.variantId
-            ) {
-              return {
-                ...prevItem,
-                quantity: currItem.quantity,
-                price: (currItem.quantity + 1) * prevItem.price,
-              };
-            } else {
-              //if currItem's productId and variantId don't match
-              // with one of the previous items then return the prevItem
-              return prevItem;
-            }
-          });
-
-          // Push the updated items to cartItems
-          cartItems.push(...updatedItems);
+          // Return any item as it is which variantId
+          // doesn't match with currItem's variantId
+          return cartItem;
         }
-      }
+      });
     }
 
-    // Set cart items to local storage
-    localStorage.setItem("cart-items", JSON.stringify(cartItems));
+    // Update the cartItems with updatedItems
+    setCartItems(updatedItems);
 
-    // Update cart items
-    setCartItems(cartItems);
+    // Set updatedItems to local storage
+    localStorage.setItem("cart-items", JSON.stringify(updatedItems));
   };
 
   // Increase variant quantity in cart
