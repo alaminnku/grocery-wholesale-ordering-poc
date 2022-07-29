@@ -17,7 +17,7 @@ export const CartProvider = ({ children }) => {
   const router = useRouter();
   const [cartItems, setCartItems] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
-  const { initialProducts } = useProduct();
+  const { variants } = useProduct();
 
   // Get items from local storage on app reload
   useEffect(() => {
@@ -41,7 +41,7 @@ export const CartProvider = ({ children }) => {
   );
 
   // Add items to cart
-  const addItemToCart = (rawId) => {
+  const addVariantToCart = (rawId) => {
     // Updated items
     let updatedItems = [];
 
@@ -49,8 +49,8 @@ export const CartProvider = ({ children }) => {
     const productId = formatId(rawId);
 
     // Current item
-    const currItem = initialProducts.find(
-      (initialProduct) => initialProduct.productId === productId
+    const currItem = variants.find(
+      (variant) => variant.productId === productId
     );
 
     // Set the updatedItems
@@ -105,11 +105,11 @@ export const CartProvider = ({ children }) => {
       }
     });
 
-    // Set updated items to local storage
-    localStorage.setItem("cart-items", JSON.stringify(updatedItems));
-
     // Set updated items to cart
     setCartItems(updatedItems);
+
+    // Set updated items to local storage
+    localStorage.setItem("cart-items", JSON.stringify(updatedItems));
   };
 
   // Increase variant quantity in cart
@@ -127,25 +127,25 @@ export const CartProvider = ({ children }) => {
       }
     });
 
-    // Set updated items to local storage
-    localStorage.setItem("cart-items", JSON.stringify(updatedItems));
-
     // Set updated items to cart
     setCartItems(updatedItems);
+
+    // Set updated items to local storage
+    localStorage.setItem("cart-items", JSON.stringify(updatedItems));
   };
 
   // Remove cart item
-  const removeItemFromCart = (variantId) => {
+  const removeVariantFromCart = (variantId) => {
     // Filter the items by variant id
     const filteredItems = cartItems.filter(
-      (item) => item.variantId !== variantId
+      (cartItem) => cartItem.variantId !== variantId
     );
-
-    // Set updated items to local storage
-    localStorage.setItem("cart-items", JSON.stringify(filteredItems));
 
     // Update cartUpdated state
     setCartItems(filteredItems);
+
+    // Set updated items to local storage
+    localStorage.setItem("cart-items", JSON.stringify(filteredItems));
   };
 
   // Handle checkout
@@ -180,10 +180,10 @@ export const CartProvider = ({ children }) => {
         closeCart,
         totalCartQuantity,
         totalCartPrice,
-        addItemToCart,
+        addVariantToCart,
         increaseVariantQuantity,
         decreaseVariantQuantity,
-        removeItemFromCart,
+        removeVariantFromCart,
         checkoutCart,
       }}
     >

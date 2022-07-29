@@ -9,12 +9,12 @@ import styles from "@styles/products/products.module.css";
 
 const ProductsPage = ({ products }) => {
   // Hooks
-  const { addItemToCart } = useCart();
+  const { addVariantToCart } = useCart();
   const {
-    currentProduct,
-    changeProductVariant,
-    increaseProductQuantity,
-    decreaseProductQuantity,
+    currentVariant,
+    changeVariant,
+    increaseVariantQuantity,
+    decreaseVariantQuantity,
   } = useProduct();
 
   return (
@@ -35,9 +35,7 @@ const ProductsPage = ({ products }) => {
           </Link>
 
           {/* Product variant options */}
-          <select
-            onChange={(e) => changeProductVariant(product, e.target.value)}
-          >
+          <select onChange={(e) => changeVariant(product, e.target.value)}>
             {product.variants.map((variant) => (
               <option key={formatId(variant.id)} value={formatId(variant.id)}>
                 {variant.title}
@@ -46,24 +44,26 @@ const ProductsPage = ({ products }) => {
           </select>
 
           {/* Increase quantity button */}
-          <AiOutlinePlus onClick={() => increaseProductQuantity(product)} />
+          <AiOutlinePlus onClick={() => increaseVariantQuantity(product)} />
 
           {/* Quantity */}
-          <span>{currentProduct(product.id)?.quantity}</span>
+          <span>{currentVariant(product.id)?.quantity}</span>
 
           {/* Render the minus button if product quantity is more than 1 */}
-          {currentProduct(product.id)?.quantity > 1 && (
-            <AiOutlineMinus onClick={() => decreaseProductQuantity(product)} />
+          {currentVariant(product.id)?.quantity > 1 && (
+            <AiOutlineMinus onClick={() => decreaseVariantQuantity(product)} />
           )}
 
           {/* Render cart item price or initial price */}
           <p>
             AUD $
-            {currentProduct(product.id)?.price ||
+            {currentVariant(product.id)?.price ||
               parseFloat(product.variants[0].price)}
           </p>
 
-          <button onClick={() => addItemToCart(product.id)}>Add to Cart</button>
+          <button onClick={() => addVariantToCart(product.id)}>
+            Add to Cart
+          </button>
         </div>
       ))}
     </div>

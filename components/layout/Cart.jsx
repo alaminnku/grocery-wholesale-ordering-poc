@@ -13,7 +13,7 @@ const Cart = ({ isOpen }) => {
     totalCartQuantity,
     increaseVariantQuantity,
     decreaseVariantQuantity,
-    removeItemFromCart,
+    removeVariantFromCart,
     checkoutCart,
   } = useCart();
 
@@ -78,7 +78,7 @@ const Cart = ({ isOpen }) => {
               {/* Delete */}
               <div className={styles.Delete}>
                 <IoCloseOutline
-                  onClick={() => removeItemFromCart(item.variantId)}
+                  onClick={() => removeVariantFromCart(item.variantId)}
                 />
               </div>
             </div>
