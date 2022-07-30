@@ -19,7 +19,8 @@ export const CartProvider = ({ children }) => {
   const [isOpen, setIsOpen] = useState(false);
   const { products } = useProduct();
 
-  // Get items from local storage on app reload
+  // On app reload, get items from local storage
+  // and update the cartItems state
   useEffect(() => {
     setCartItems(JSON.parse(localStorage.getItem("cart-items")) || []);
   }, []);
@@ -49,41 +50,35 @@ export const CartProvider = ({ children }) => {
     const productId = formatId(rawId);
 
     // Current item
-    const currItem = products.find(
-      (variant) => variant.productId === productId
-    );
+    const newItem = products.find((variant) => variant.productId === productId);
 
     // Set the updatedItems
     // If the current variant isn't in the cart
     if (
-      cartItems.find((cartItem) => cartItem.variantId === currItem.variantId) ==
-      null
+      !cartItems.some((cartItem) => cartItem.variantId === newItem.variantId)
     ) {
       // Add the current variant with
       // any previous variants to the updatedItems
-      updatedItems = [...cartItems, currItem];
+      updatedItems = [...cartItems, newItem];
 
       // If the current variant is in the cart
     } else {
-      // Set the updatedItems with updated cartItems
       updatedItems = cartItems.map((cartItem) => {
-        // Update the item in the cart which has
-        // the same variantId as the currItem variantId
-        if (cartItem.variantId === currItem.variantId) {
+        // Find and update the item
+        if (cartItem.variantId === newItem.variantId) {
           return {
             ...cartItem,
-            quantity: currItem.quantity,
-            price: currItem.price,
+            quantity: newItem.quantity,
+            price: newItem.price,
           };
         } else {
-          // Return any item as it is which variantId
-          // doesn't match with currItem's variantId
+          // Return the other items
           return cartItem;
         }
       });
     }
 
-    // Update the cartItems with updatedItems
+    // Update cartItems with updatedItems
     setCartItems(updatedItems);
 
     // Set updatedItems to local storage
@@ -92,8 +87,8 @@ export const CartProvider = ({ children }) => {
 
   // Increase variant quantity in cart
   const increaseVariantQuantity = (variantId) => {
-    // Update the quantity and price
     const updatedItems = cartItems.map((cartItem) => {
+      // Find and update the variant
       if (cartItem.variantId === variantId) {
         return {
           ...cartItem,
@@ -101,6 +96,7 @@ export const CartProvider = ({ children }) => {
           price: (cartItem.quantity + 1) * cartItem.variantPrice,
         };
       } else {
+        // Return other items
         return cartItem;
       }
     });
@@ -112,10 +108,10 @@ export const CartProvider = ({ children }) => {
     localStorage.setItem("cart-items", JSON.stringify(updatedItems));
   };
 
-  // Increase variant quantity in cart
+  // Decrease variant quantity in cart
   const decreaseVariantQuantity = (variantId) => {
-    // Update the quantity and price
     const updatedItems = cartItems.map((cartItem) => {
+      // Find and update the variant
       if (cartItem.variantId === variantId) {
         return {
           ...cartItem,
@@ -123,6 +119,7 @@ export const CartProvider = ({ children }) => {
           price: (cartItem.quantity - 1) * cartItem.variantPrice,
         };
       } else {
+        // Return the other items
         return cartItem;
       }
     });
@@ -141,14 +138,14 @@ export const CartProvider = ({ children }) => {
       (cartItem) => cartItem.variantId !== variantId
     );
 
-    // Update cartUpdated state
+    // Set updated items to cart
     setCartItems(filteredItems);
 
     // Set updated items to local storage
     localStorage.setItem("cart-items", JSON.stringify(filteredItems));
   };
 
-  // Handle checkout
+  // Checkout the cart
   const checkoutCart = async () => {
     // Create a checkout
     const createCheckout = await shopifyClient.checkout.create();
@@ -156,13 +153,13 @@ export const CartProvider = ({ children }) => {
     // Checkout Id
     const checkoutId = createCheckout.id;
 
-    // Line items / items
+    // Line items / variants
     const lineItemsToAdd = cartItems.map((cartItem) => ({
       variantId: `gid://shopify/ProductVariant/${cartItem.variantId}`,
       quantity: cartItem.quantity,
     }));
 
-    // Add items to check out
+    // Add variants to check out
     const checkout = await shopifyClient.checkout.addLineItems(
       checkoutId,
       lineItemsToAdd

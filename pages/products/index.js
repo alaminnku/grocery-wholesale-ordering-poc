@@ -11,7 +11,7 @@ const ProductsPage = ({ products }) => {
   // Hooks
   const { addVariantToCart } = useCart();
   const {
-    currentVariant,
+    findCurrentProduct,
     changeProductVariant,
     increaseProductQuantity,
     decreaseProductQuantity,
@@ -49,17 +49,17 @@ const ProductsPage = ({ products }) => {
           <AiOutlinePlus onClick={() => increaseProductQuantity(product)} />
 
           {/* Quantity */}
-          <span>{currentVariant(product.id)?.quantity}</span>
+          <span>{findCurrentProduct(product.id)?.quantity}</span>
 
           {/* Render the minus button if product quantity is more than 1 */}
-          {currentVariant(product.id)?.quantity > 1 && (
+          {findCurrentProduct(product.id)?.quantity > 1 && (
             <AiOutlineMinus onClick={() => decreaseProductQuantity(product)} />
           )}
 
           {/* Render cart item price or initial price */}
           <p>
             AUD $
-            {currentVariant(product.id)?.price ||
+            {findCurrentProduct(product.id)?.price ||
               parseFloat(product.variants[0].price)}
           </p>
 

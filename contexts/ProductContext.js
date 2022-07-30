@@ -12,13 +12,22 @@ export const ProductProvider = ({ children }) => {
   // Variants array
   const [products, setProducts] = useState([]);
 
-  // Current item
-  const currentVariant = (rawId) => {
+  // Find the current product
+  const findCurrentProduct = (rawId) => {
     const productId = formatId(rawId);
 
     // Return the product that matches the id
     return products.find((product) => product.productId === productId);
   };
+
+  // Find the product variant
+  const findProductVariant = (product, variantId) =>
+    product.variants.find((variant) => formatId(variant.id) === variantId);
+
+  // Find the variant id
+  const findVariantId = (product, productId) =>
+    products.find((variant) => variant.productId === productId)?.variantId ||
+    formatId(product.variants[0].id);
 
   //  Change variant
   const changeProductVariant = (product, variantId) => {
@@ -26,13 +35,12 @@ export const ProductProvider = ({ children }) => {
     const productId = formatId(product.id);
 
     // Product variant
-    const productVariant = product.variants.find(
-      (variant) => formatId(variant.id) === variantId
-    );
+    const productVariant = findProductVariant(product, variantId);
 
     // Update the products state
     setProducts((prevProducts) => {
-      // If there is no item in the cart with the product id then create an item
+      // If there is no product in the cart that
+      // matches the provided productId, then create a product
       if (
         !prevProducts.some((prevProduct) => prevProduct.productId === productId)
       ) {
@@ -49,9 +57,11 @@ export const ProductProvider = ({ children }) => {
             price: parseFloat(productVariant.price),
           },
         ];
+        // If there is a product in the cart that
+        //matches the provided productId
       } else {
-        // If there is an variant in the cart with the product id then update the variant
         return prevProducts.map((prevProduct) => {
+          // Find and update that product
           if (prevProduct.productId === productId) {
             return {
               ...prevProduct,
@@ -63,6 +73,7 @@ export const ProductProvider = ({ children }) => {
               price: parseFloat(productVariant.price),
             };
           } else {
+            // Return the other products
             return prevProduct;
           }
         });
@@ -76,18 +87,15 @@ export const ProductProvider = ({ children }) => {
     const productId = formatId(product.id);
 
     // Variant id
-    const variantId =
-      products.find((variant) => variant.productId === productId)?.variantId ||
-      formatId(product.variants[0].id);
+    const variantId = findVariantId(product, productId);
 
     // Product variant
-    const productVariant = product.variants.find(
-      (variant) => formatId(variant.id) === variantId
-    );
+    const productVariant = findProductVariant(product, variantId);
 
-    // Update variants state
+    // Update products state
     setProducts((prevProducts) => {
-      // If there is no variant in the cart with the product id then create an item
+      // If there is no product in the cart that
+      // matches the provided productId, then create a product
       if (
         !prevProducts.some((prevProduct) => prevProduct.productId === productId)
       ) {
@@ -104,9 +112,12 @@ export const ProductProvider = ({ children }) => {
             price: parseFloat(productVariant.price),
           },
         ];
+
+        // If there is a product in the cart that
+        //matches the provided productId
       } else {
-        // If there is an item in the cart with the product id then update the cart
         return prevProducts.map((prevProduct) => {
+          // Find and update that product
           if (prevProduct.productId === productId) {
             return {
               ...prevProduct,
@@ -115,7 +126,7 @@ export const ProductProvider = ({ children }) => {
                 (prevProduct.quantity + 1) * parseFloat(productVariant.price),
             };
           } else {
-            // If the provided id doesn't match with the item id then return the item
+            // Return the other products
             return prevProduct;
           }
         });
@@ -129,18 +140,15 @@ export const ProductProvider = ({ children }) => {
     const productId = formatId(product.id);
 
     // Variant id
-    const variantId =
-      products.find((variant) => variant.productId === productId)?.variantId ||
-      formatId(product.variants[0].id);
+    const variantId = findVariantId(product, productId);
 
-    // Get variant price with variant id
-    const variantPrice = product.variants.find(
-      (variant) => formatId(variant.id) === variantId
-    ).price;
+    // Variant price
+    const variantPrice = findProductVariant(product, variantId).price;
 
+    // Update the products state
     setProducts((prevProducts) => {
       return prevProducts.map((prevProduct) => {
-        // If the prevProduct the prevProduct id matches with the provided id then update the price and quantity
+        // Find and update the product
         if (prevProduct.productId === productId) {
           return {
             ...prevProduct,
@@ -148,7 +156,7 @@ export const ProductProvider = ({ children }) => {
             price: (prevProduct.quantity - 1) * variantPrice,
           };
         } else {
-          // If the provided id don't match with the prevProduct id then return the prevProduct
+          // Return the other products
           return prevProduct;
         }
       });
@@ -159,7 +167,7 @@ export const ProductProvider = ({ children }) => {
     <ProductContext.Provider
       value={{
         products,
-        currentVariant,
+        findCurrentProduct,
         changeProductVariant,
         increaseProductQuantity,
         decreaseProductQuantity,
