@@ -1,6 +1,4 @@
 import Image from "next/image";
-import { useState } from "react";
-import { useRouter } from "next/router";
 import { useCart } from "@contexts/CartContext";
 import { shopifyClient } from "@utils/shopify";
 import { formatId } from "@utils/formatId";

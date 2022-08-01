@@ -73,11 +73,15 @@ const ProductsPage = ({ products }) => {
 };
 
 export const getStaticProps = async () => {
-  const products = await shopifyClient.product.fetchAll();
+  // Fetch the products
+  const data = await shopifyClient.product.fetchAll();
+
+  // Parse the data
+  const products = JSON.parse(JSON.stringify(data));
 
   return {
     props: {
-      products: JSON.parse(JSON.stringify(products)),
+      products,
     },
   };
 };
