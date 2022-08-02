@@ -1,15 +1,10 @@
-import { useEffect, useState } from "react";
 import Link from "next/link";
-import { useCart } from "@contexts/CartContext";
 import { MdOutlineShoppingCart } from "react-icons/md";
-import styles from "@styles/layout/Navigation.module.css";
+import styles from "@styles/layout/DesktopNav.module.css";
 
-const Navigation = () => {
-  // Hooks
-  const { openCart, totalCartQuantity } = useCart();
-
+const DesktopNav = ({ openCart, totalCartQuantity }) => {
   return (
-    <nav className={styles.Navigation}>
+    <nav className={styles.DesktopNav}>
       <div>
         <Link href="/">
           <a>Home</a>
@@ -28,4 +23,4 @@ const Navigation = () => {
   );
 };
 
-export default Navigation;
+export default DesktopNav;

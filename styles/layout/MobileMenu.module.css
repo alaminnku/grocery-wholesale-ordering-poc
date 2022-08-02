@@ -1,0 +1,53 @@
+.MobileMenu {
+  position: fixed;
+  top: 0;
+  left: -100%;
+  width: 60vw;
+  height: 100vh;
+  background-color: white;
+  padding: 0.75rem 1rem;
+  z-index: 10;
+  transition: 200ms ease-in-out;
+}
+
+.MobileMenu.Open {
+  left: 0;
+}
+
+.MobileMenu svg {
+  font-size: 1.75rem;
+  cursor: pointer;
+  color: var(--darkCharcoal);
+  margin-bottom: 0.75remrem;
+}
+
+.Navigation {
+  display: flex;
+  flex-direction: column;
+}
+
+.Navigation a {
+  padding: 0.5rem 0rem;
+  margin-top: 0.75rem;
+  font-size: 1.25rem;
+  font-weight: 500;
+  color: var(--darkCharcoal);
+  border-bottom: 1.5px solid var(--darkCharcoal);
+}
+
+.Overlay {
+  position: fixed;
+  opacity: 0;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  transition: 200ms ease-in-out;
+  background-color: rgba(0, 0, 0, 0.5);
+  pointer-events: none;
+}
+
+.Overlay.Open {
+  opacity: 1;
+  pointer-events: all;
+}

@@ -1,5 +1,5 @@
 .Overlay {
-  position: absolute;
+  position: fixed;
   background-color: rgba(0, 0, 0, 0.516);
   width: 100vw;
   height: 100vh;
@@ -10,7 +10,7 @@
 }
 
 .Cart {
-  position: absolute;
+  position: fixed;
   top: 0;
   right: -100%;
   width: 35vw;

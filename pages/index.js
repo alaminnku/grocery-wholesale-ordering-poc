@@ -2,7 +2,7 @@ import { shopifyClient } from "@utils/shopify";
 
 const HomePage = ({ collections }) => {
   console.log(collections);
-  return <div>Hello world</div>;
+  return <div></div>;
 };
 
 export async function getStaticProps() {
