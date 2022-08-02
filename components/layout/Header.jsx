@@ -10,10 +10,9 @@ const Header = () => {
   const { openCart, totalCartQuantity } = useCart();
   const [isOpen, setIsOpen] = useState(false);
 
+  // Menu open and close functions
   const openMobileMenu = () => setIsOpen(true);
   const closeMobileMenu = () => setIsOpen(false);
-
-  console.log(isOpen);
 
   return (
     <header className={styles.Header}>

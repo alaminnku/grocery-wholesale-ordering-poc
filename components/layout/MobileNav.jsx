@@ -8,11 +8,11 @@ const MobileNav = ({ openMenu, openCart, totalCartQuantity }) => {
         <HiOutlineMenuAlt4 />
       </div>
 
-      <div className={styles.Cart}>
+      <div className={styles.Cart} onClick={openCart}>
         <HiOutlineShoppingCart />
-        <div className={styles.Quantity}>
-          {totalCartQuantity > 0 && <span>{totalCartQuantity}</span>}
-        </div>
+        {totalCartQuantity > 0 && (
+          <span className={styles.Quantity}>{totalCartQuantity}</span>
+        )}
       </div>
     </nav>
   );

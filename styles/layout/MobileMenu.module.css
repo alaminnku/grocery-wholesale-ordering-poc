@@ -15,10 +15,14 @@
 }
 
 .MobileMenu svg {
-  font-size: 1.75rem;
   cursor: pointer;
+  width: 1.75rem;
+  height: 1.75rem;
+  padding: 0.25rem;
+  border-radius: 100%;
+  margin-bottom: 0.5rem;
   color: var(--darkCharcoal);
-  margin-bottom: 0.75remrem;
+  background-color: var(--almostWhite);
 }
 
 .Navigation {
@@ -28,7 +32,7 @@
 
 .Navigation a {
   padding: 0.5rem 0rem;
-  margin-top: 0.75rem;
+  margin-top: 1rem;
   font-size: 1.25rem;
   font-weight: 500;
   color: var(--darkCharcoal);
