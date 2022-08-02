@@ -19,41 +19,51 @@ const ProductDetailsPage = ({ product }) => {
   const imageSources = product.images.map((image) => image.src);
 
   return (
-    <div>
-      <h3>{product.title}</h3>
+    <main>
+      <section>
+        <h3>{product.title}</h3>
 
-      {imageSources.map((src) => (
-        <Image key={src} src={src} width={16} height={9} layout="responsive" />
-      ))}
-
-      <AiOutlinePlus onClick={() => increaseProductQuantity(product)} />
-
-      <span>{findCurrentProduct(product.id)?.quantity}</span>
-
-      {/* Render the minus button if product quantity is more than 0 */}
-
-      {findCurrentProduct(product.id)?.quantity > 1 && (
-        <AiOutlineMinus onClick={() => decreaseProductQuantity(product)} />
-      )}
-
-      {/* Render cart item price or initial price */}
-      <p>
-        AUD $
-        {findCurrentProduct(product.id)?.price ||
-          parseFloat(product.variants[0].price)}
-      </p>
-
-      {/* Product variant options */}
-      <select onChange={(e) => changeProductVariant(product, e.target.value)}>
-        {product.variants.map((variant) => (
-          <option key={formatId(variant.id)} value={formatId(variant.id)}>
-            {variant.title}
-          </option>
+        {imageSources.map((src) => (
+          <Image
+            key={src}
+            src={src}
+            width={16}
+            height={9}
+            layout="responsive"
+          />
         ))}
-      </select>
 
-      <button onClick={() => addVariantToCart(product.id)}>Add to cart</button>
-    </div>
+        <AiOutlinePlus onClick={() => increaseProductQuantity(product)} />
+
+        <span>{findCurrentProduct(product.id)?.quantity}</span>
+
+        {/* Render the minus button if product quantity is more than 0 */}
+
+        {findCurrentProduct(product.id)?.quantity > 1 && (
+          <AiOutlineMinus onClick={() => decreaseProductQuantity(product)} />
+        )}
+
+        {/* Render cart item price or initial price */}
+        <p>
+          AUD $
+          {findCurrentProduct(product.id)?.price ||
+            parseFloat(product.variants[0].price)}
+        </p>
+
+        {/* Product variant options */}
+        <select onChange={(e) => changeProductVariant(product, e.target.value)}>
+          {product.variants.map((variant) => (
+            <option key={formatId(variant.id)} value={formatId(variant.id)}>
+              {variant.title}
+            </option>
+          ))}
+        </select>
+
+        <button onClick={() => addVariantToCart(product.id)}>
+          Add to cart
+        </button>
+      </section>
+    </main>
   );
 };
 

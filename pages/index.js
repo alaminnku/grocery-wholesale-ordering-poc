@@ -1,8 +1,14 @@
 import { shopifyClient } from "@utils/shopify";
+import Collection from "@components/home/Collection";
 
 const HomePage = ({ collections }) => {
-  console.log(collections);
-  return <div></div>;
+  return (
+    <main>
+      {collections.map((collection) => (
+        <Collection collection={collection} />
+      ))}
+    </main>
+  );
 };
 
 export async function getStaticProps() {
