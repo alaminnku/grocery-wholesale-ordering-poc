@@ -54,7 +54,7 @@ export const ProductProvider = ({ children }) => {
             variantName: productVariant.title,
             variantPrice: parseFloat(productVariant.price),
             variantImage: productVariant.image.src,
-            price: parseFloat(productVariant.price).toFixed(2),
+            price: parseFloat(productVariant.price),
           },
         ];
         // If there is a product in the cart that
@@ -122,10 +122,11 @@ export const ProductProvider = ({ children }) => {
             return {
               ...prevProduct,
               quantity: prevProduct.quantity + 1,
-              price: (
-                (prevProduct.quantity + 1) *
-                parseFloat(productVariant.price)
-              ).toFixed(2),
+              price: parseFloat(
+                ((prevProduct.quantity + 1) * prevProduct.variantPrice).toFixed(
+                  2
+                )
+              ),
             };
           } else {
             // Return the other products
@@ -155,7 +156,9 @@ export const ProductProvider = ({ children }) => {
           return {
             ...prevProduct,
             quantity: prevProduct.quantity - 1,
-            price: ((prevProduct.quantity - 1) * variantPrice).toFixed(2),
+            price: parseFloat(
+              ((prevProduct.quantity - 1) * variantPrice).toFixed(2)
+            ),
           };
         } else {
           // Return the other products
@@ -169,6 +172,7 @@ export const ProductProvider = ({ children }) => {
     <ProductContext.Provider
       value={{
         products,
+        setProducts,
         findCurrentProduct,
         changeProductVariant,
         increaseProductQuantity,

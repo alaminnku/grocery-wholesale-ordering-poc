@@ -9,6 +9,7 @@ import styles from "@styles/products/Product.module.css";
 const Product = ({ product }) => {
   const {
     findCurrentProduct,
+    changeProductVariant,
     increaseProductQuantity,
     decreaseProductQuantity,
   } = useProduct();

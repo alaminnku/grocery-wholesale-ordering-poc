@@ -17,7 +17,7 @@ export const CartProvider = ({ children }) => {
   const router = useRouter();
   const [cartItems, setCartItems] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
-  const { products, findCurrentProduct } = useProduct();
+  const { products, setProducts } = useProduct();
 
   // On app reload, get items from local storage
   // and update the cartItems state
@@ -37,7 +37,7 @@ export const CartProvider = ({ children }) => {
 
   // Calculate total price
   const totalCartPrice = cartItems.reduce(
-    (price, currItem) => price + currItem.price,
+    (price, currItem) => parseFloat((price + currItem.price).toFixed(2)),
     0
   );
 
@@ -83,6 +83,23 @@ export const CartProvider = ({ children }) => {
 
     // Set updatedItems to local storage
     localStorage.setItem("cart-items", JSON.stringify(updatedItems));
+
+    // Update the products
+    setProducts((prevProducts) =>
+      prevProducts.map((prevProduct) => {
+        // Find and update the item
+        if (prevProduct.productId === productId) {
+          return {
+            ...prevProduct,
+            quantity: 0,
+            price: prevProduct.variantPrice,
+          };
+        } else {
+          // Return other items
+          return prevProduct;
+        }
+      })
+    );
   };
 
   // Increase variant quantity in cart
@@ -93,7 +110,9 @@ export const CartProvider = ({ children }) => {
         return {
           ...cartItem,
           quantity: cartItem.quantity + 1,
-          price: (cartItem.quantity + 1) * cartItem.variantPrice,
+          price: parseFloat(
+            ((cartItem.quantity + 1) * cartItem.variantPrice).toFixed(2)
+          ),
         };
       } else {
         // Return other items
@@ -116,7 +135,9 @@ export const CartProvider = ({ children }) => {
         return {
           ...cartItem,
           quantity: cartItem.quantity - 1,
-          price: (cartItem.quantity - 1) * cartItem.variantPrice,
+          price: parseFloat(
+            ((cartItem.quantity - 1) * cartItem.variantPrice).toFixed(2)
+          ),
         };
       } else {
         // Return the other items

@@ -87,9 +87,11 @@ const Cart = ({ isOpen }) => {
           </div>
 
           {/* Checkout button */}
-          <button onClick={checkoutCart} className={styles.Checkout}>
-            Checkout now (${totalCartPrice})
-          </button>
+          {cartItems.length > 0 && (
+            <button onClick={checkoutCart} className={styles.Checkout}>
+              Checkout now (${totalCartPrice})
+            </button>
+          )}
         </div>
       </div>
 
