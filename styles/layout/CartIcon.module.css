@@ -1,0 +1,25 @@
+.CartIcon {
+  cursor: pointer;
+  position: relative;
+}
+
+.Quantity {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  top: -0.5rem;
+  right: -0.75rem;
+  width: 1.25rem;
+  height: 1.25rem;
+  font-size: 0.7rem;
+  background-color: var(--midnightGreen);
+  color: var(--almostWhite);
+  border-radius: 100%;
+}
+
+@media (min-width: 768px) {
+  .CartIcon svg {
+    font-size: 1.75rem;
+  }
+}

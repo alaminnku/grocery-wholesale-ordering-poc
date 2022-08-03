@@ -1,24 +1,35 @@
 import Link from "next/link";
-import { MdOutlineShoppingCart } from "react-icons/md";
 import styles from "@styles/layout/DesktopNav.module.css";
+import CartIcon from "@components/layout/CartIcon";
+import { useRouter } from "next/router";
 
 const DesktopNav = ({ openCart, totalCartQuantity }) => {
+  const router = useRouter();
+
+  const path = router.pathname;
+
   return (
     <nav className={styles.DesktopNav}>
-      <div>
+      <div className={styles.Home}>
         <Link href="/">
           <a>Home</a>
         </Link>
       </div>
-      <ul>
-        <Link href="/products">
-          <a>Products</a>
-        </Link>
-        <li onClick={openCart}>
-          {totalCartQuantity > 0 && <span>{totalCartQuantity}</span>}
-          <MdOutlineShoppingCart />
+
+      <ul className={styles.Navigation}>
+        <li>
+          <Link href="/products">
+            <a className={path === "/products" && styles.Active}>Products</a>
+          </Link>
+        </li>
+        <li>
+          <Link href="/about-us">
+            <a className={path === "/about-us" && styles.Active}>About us</a>
+          </Link>
         </li>
       </ul>
+
+      <CartIcon openCart={openCart} totalCartQuantity={totalCartQuantity} />
     </nav>
   );
 };

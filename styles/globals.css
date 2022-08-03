@@ -28,6 +28,8 @@ body {
 
 p,
 a {
+  font-weight: 100;
+  line-height: 1.6em;
   color: var(--darkCharcoal);
 }
 

@@ -22,6 +22,16 @@
   justify-content: space-between;
 }
 
+.TitleAndPrice p {
+  font-weight: 500;
+}
+
+.TitleAndPrice p:last-child {
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--metallicSeaweed);
+}
+
 .Control {
   display: flex;
   align-items: center;

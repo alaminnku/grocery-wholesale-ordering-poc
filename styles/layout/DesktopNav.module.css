@@ -1,3 +1,32 @@
 .DesktopNav {
   display: none;
 }
+
+@media (min-width: 768px) {
+  .DesktopNav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .Home a {
+    font-weight: 600;
+  }
+
+  .Navigation {
+    display: flex;
+    align-items: center;
+  }
+
+  .Navigation li a {
+    font-size: 0.9rem;
+    padding: 0.5rem 0.75rem;
+    font-weight: 400;
+    transition: all 200ms ease-in-out;
+  }
+
+  .Navigation li a:hover,
+  .Navigation li a.Active {
+    color: var(--metallicSeaweed);
+  }
+}

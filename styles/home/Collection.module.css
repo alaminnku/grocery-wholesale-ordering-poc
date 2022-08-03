@@ -9,3 +9,14 @@
 .Title h2 {
   margin-bottom: 0.5rem;
 }
+
+@media (min-width: 768px) {
+  .Collection {
+    padding: 1.5rem 2rem;
+  }
+}
+@media (min-width: 1024px) {
+  .Collection {
+    padding: 2rem 3rem;
+  }
+}

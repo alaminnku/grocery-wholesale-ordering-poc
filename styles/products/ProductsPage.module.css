@@ -1,3 +1,14 @@
 .Products {
   padding: 1rem;
 }
+
+@media (min-width: 768px) {
+  .Products {
+    padding: 1.5rem 2rem;
+  }
+}
+@media (min-width: 1024px) {
+  .Products {
+    padding: 2rem 3rem;
+  }
+}

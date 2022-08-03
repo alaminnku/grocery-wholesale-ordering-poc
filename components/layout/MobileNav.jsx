@@ -1,4 +1,5 @@
 import { HiOutlineMenuAlt4, HiOutlineShoppingCart } from "react-icons/hi";
+import CartIcon from "@components/layout/CartIcon";
 import styles from "@styles/layout/MobileNav.module.css";
 
 const MobileNav = ({ openMenu, openCart, totalCartQuantity }) => {
@@ -8,12 +9,7 @@ const MobileNav = ({ openMenu, openCart, totalCartQuantity }) => {
         <HiOutlineMenuAlt4 />
       </div>
 
-      <div className={styles.Cart} onClick={openCart}>
-        <HiOutlineShoppingCart />
-        {totalCartQuantity > 0 && (
-          <span className={styles.Quantity}>{totalCartQuantity}</span>
-        )}
-      </div>
+      <CartIcon openCart={openCart} totalCartQuantity={totalCartQuantity} />
     </nav>
   );
 };
