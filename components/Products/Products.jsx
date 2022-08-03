@@ -1,6 +1,6 @@
 import Product from "@components/Products/Product";
 import { formatId } from "@utils/formatId";
-import styles from "../../styles/products/Products.module.css";
+import styles from "@styles/products/Products.module.css";
 
 const Products = ({ products }) => {
   return (

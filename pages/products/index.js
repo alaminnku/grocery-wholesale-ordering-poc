@@ -3,7 +3,6 @@ import Products from "@components/Products/Products";
 import styles from "@styles/products/ProductsPage.module.css";
 
 const ProductsPage = ({ products }) => {
-  console.log(products);
   return (
     <main>
       <section className={styles.Products}>
