@@ -1,3 +1,4 @@
+import { shopifyClient } from "@utils/shopify";
 import Products from "@components/Products/Products";
 import styles from "@styles/products/ProductsPage.module.css";
 

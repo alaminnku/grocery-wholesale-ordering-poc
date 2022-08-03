@@ -14,10 +14,19 @@ const Product = ({ product }) => {
   } = useProduct();
   const { addVariantToCart } = useCart();
 
+  // Current product
+  const currentProduct = findCurrentProduct(product.id);
+
+  // Quantity
+  const quantity = currentProduct?.quantity;
+
+  // Price
+  const price = currentProduct?.price;
+
   return (
-    <div key={formatId(product.id)} className={styles.Product}>
+    <div className={styles.Product}>
       {/* Product title and image */}
-      <div className={styles.ImageAndTitle}>
+      <div className={styles.Image}>
         <Link href={`/products/${formatId(product.id)}`}>
           <a>
             <Image
@@ -26,46 +35,61 @@ const Product = ({ product }) => {
               width={16}
               layout="responsive"
             />
-
-            <div className={styles.TitleAndPrice}>
-              <p>{product.title}</p>
-
-              {/* Render cart item price or initial price */}
-              <p>
-                AUD $
-                {findCurrentProduct(product.id)?.price ||
-                  parseFloat(product.variants[0].price)}
-              </p>
-            </div>
           </a>
         </Link>
       </div>
 
-      <div className={styles.VariantsAndControl}>
-        {/* Product variant options */}
-        <select onChange={(e) => changeProductVariant(product, e.target.value)}>
-          {product.variants.map((variant) => (
-            <option key={formatId(variant.id)} value={formatId(variant.id)}>
-              {variant.title}
-            </option>
-          ))}
-        </select>
+      {/* Controller */}
+      <div className={styles.Controller}>
+        {/* Title and price */}
+        <div className={styles.TitleAndPrice}>
+          <Link href={`/products/${formatId(product.id)}`}>
+            <a>
+              <p>{product.title}</p>
+              <p>
+                AUD $
+                {quantity > 0 ? price : parseFloat(product.variants[0].price)}
+              </p>
+            </a>
+          </Link>
+        </div>
 
-        {/* Increase quantity button */}
-        <AiOutlinePlus onClick={() => increaseProductQuantity(product)} />
+        {/* Control */}
+        <div className={styles.Control}>
+          <select
+            onChange={(e) => changeProductVariant(product, e.target.value)}
+          >
+            {product.variants.map((variant) => (
+              <option key={formatId(variant.id)} value={formatId(variant.id)}>
+                {variant.title}
+              </option>
+            ))}
+          </select>
 
-        {/* Quantity */}
-        <p className={styles.Quantity}>
-          {findCurrentProduct(product.id)?.quantity}
-        </p>
+          <AiOutlinePlus
+            className={quantity > 0 && styles.Active}
+            onClick={() => increaseProductQuantity(product)}
+          />
 
-        {/* Render the minus button if product quantity is more than 1 */}
-        {findCurrentProduct(product.id)?.quantity > 1 && (
-          <AiOutlineMinus onClick={() => decreaseProductQuantity(product)} />
-        )}
+          <p className={quantity > 0 ? styles.Quantity : null}>
+            {quantity > 0 && quantity}
+          </p>
+
+          {quantity > 0 && (
+            <AiOutlineMinus
+              className={styles.Active}
+              onClick={() => decreaseProductQuantity(product)}
+            />
+          )}
+        </div>
+
+        <button
+          className={`${styles.AddToCart} ${quantity > 0 && styles.Active}`}
+          onClick={() => addVariantToCart(product.id)}
+        >
+          Add to Cart
+        </button>
       </div>
-
-      <button onClick={() => addVariantToCart(product.id)}>Add to Cart</button>
     </div>
   );
 };

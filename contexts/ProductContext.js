@@ -54,7 +54,7 @@ export const ProductProvider = ({ children }) => {
             variantName: productVariant.title,
             variantPrice: parseFloat(productVariant.price),
             variantImage: productVariant.image.src,
-            price: parseFloat(productVariant.price),
+            price: parseFloat(productVariant.price).toFixed(2),
           },
         ];
         // If there is a product in the cart that
@@ -122,8 +122,10 @@ export const ProductProvider = ({ children }) => {
             return {
               ...prevProduct,
               quantity: prevProduct.quantity + 1,
-              price:
-                (prevProduct.quantity + 1) * parseFloat(productVariant.price),
+              price: (
+                (prevProduct.quantity + 1) *
+                parseFloat(productVariant.price)
+              ).toFixed(2),
             };
           } else {
             // Return the other products
@@ -153,7 +155,7 @@ export const ProductProvider = ({ children }) => {
           return {
             ...prevProduct,
             quantity: prevProduct.quantity - 1,
-            price: (prevProduct.quantity - 1) * variantPrice,
+            price: ((prevProduct.quantity - 1) * variantPrice).toFixed(2),
           };
         } else {
           // Return the other products

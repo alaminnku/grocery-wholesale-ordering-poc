@@ -17,7 +17,7 @@ export const CartProvider = ({ children }) => {
   const router = useRouter();
   const [cartItems, setCartItems] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
-  const { products } = useProduct();
+  const { products, findCurrentProduct } = useProduct();
 
   // On app reload, get items from local storage
   // and update the cartItems state

@@ -1,11 +1,12 @@
 import { shopifyClient } from "@utils/shopify";
 import Collection from "@components/home/Collection";
+import { formatId } from "@utils/formatId";
 
 const HomePage = ({ collections }) => {
   return (
     <main>
       {collections.map((collection) => (
-        <Collection collection={collection} />
+        <Collection key={formatId(collection.id)} collection={collection} />
       ))}
     </main>
   );
