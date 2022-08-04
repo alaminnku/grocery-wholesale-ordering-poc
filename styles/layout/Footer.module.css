@@ -1,5 +1,7 @@
 .Footer {
   padding: 1rem;
+  max-width: 1560px;
+  margin: 0 auto;
   background-color: var(--midnightGreen);
 }
 
@@ -50,6 +52,13 @@
     padding: 2rem 3rem;
   }
 
+  .Details {
+    width: 60%;
+    margin-right: 3rem;
+  }
+}
+
+@media (min-width: 1280px) {
   .Details {
     width: 40%;
     margin-right: 3rem;

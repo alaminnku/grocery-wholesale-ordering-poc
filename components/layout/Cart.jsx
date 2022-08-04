@@ -35,7 +35,7 @@ const Cart = ({ isOpen }) => {
       title = title.split("").slice(0, 16).join("");
     }
 
-    return <p>{title} ...</p>;
+    return <p>{title}...</p>;
   };
 
   return (
