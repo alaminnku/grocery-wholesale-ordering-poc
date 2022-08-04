@@ -3,7 +3,9 @@ import { useCart } from "@contexts/CartContext";
 import { AiOutlinePlus, AiOutlineMinus } from "react-icons/ai";
 import { HiOutlineShoppingBag } from "react-icons/hi";
 import { IoCloseOutline } from "react-icons/io5";
+import { disableBodyScroll, enableBodyScroll } from "body-scroll-lock";
 import styles from "@styles/layout/Cart.module.css";
+import { useEffect } from "react";
 
 const Cart = ({ isOpen }) => {
   // Hooks
@@ -18,9 +20,27 @@ const Cart = ({ isOpen }) => {
     checkoutCart,
   } = useCart();
 
+  // Disable and enable body scroll
+  useEffect(() => {
+    const cart = document.querySelector("#Cart");
+
+    isOpen ? disableBodyScroll(cart) : enableBodyScroll(cart);
+  });
+
+  // Format product title
+  const productTitle = (name, variantName) => {
+    let title = `${name} - ${variantName}`;
+
+    if (title.length > 15) {
+      title = title.split("").slice(0, 16).join("");
+    }
+
+    return <p>{title} ...</p>;
+  };
+
   return (
-    <>
-      <div className={`${styles.Cart} ${isOpen && styles.Open}`}>
+    <div>
+      <div id="Cart" className={`${styles.Cart} ${isOpen && styles.Open}`}>
         {/* Cart top */}
         <div className={styles.CartTop}>
           <p>
@@ -35,7 +55,7 @@ const Cart = ({ isOpen }) => {
           {/* Items */}
           <div>
             {cartItems.length === 0 ? (
-              <p className={styles.EmptyCart}>Your cart is empty</p>
+              <p className={styles.EmptyCart}>Your cart is empty!</p>
             ) : (
               cartItems.map((item) => (
                 <div key={item.variantId} className={styles.Item}>
@@ -66,9 +86,7 @@ const Cart = ({ isOpen }) => {
 
                   {/* Content */}
                   <div className={styles.Content}>
-                    <p>
-                      {item.name} - <span>{item.variantName}</span>
-                    </p>
+                    {productTitle(item.name, item.variantName)}
                     <small>
                       ${item.variantPrice} x {item.quantity}
                     </small>
@@ -100,7 +118,7 @@ const Cart = ({ isOpen }) => {
         className={`${styles.Overlay} ${isOpen && styles.Open}`}
         onClick={closeCart}
       ></div>
-    </>
+    </div>
   );
 };
 

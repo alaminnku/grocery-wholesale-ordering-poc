@@ -1,11 +1,11 @@
 html,
 body {
-  font-size: 16px;
-  font-family: "Roboto", sans-serif;
-  max-width: 1280px;
   margin: 0 auto;
-  scroll-behavior: smooth;
+  font-size: 16px;
+  max-width: 1280px;
   position: relative;
+  scroll-behavior: smooth;
+  font-family: "Roboto", sans-serif;
 }
 
 * {
