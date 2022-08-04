@@ -1,0 +1,62 @@
+.Controller {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1.25rem;
+}
+
+.Controller select {
+  width: 50%;
+  outline: none;
+  padding: 0.5rem;
+  margin-right: 1rem;
+  border-radius: 0.25rem;
+  color: var(--darkCharcoal);
+  -webkit-appearance: initial;
+  border: 1.5px solid var(--gainsboro);
+}
+
+.Controller svg {
+  width: 50%;
+  cursor: pointer;
+  height: 2.25rem;
+  padding: 0.5rem;
+  border-radius: 0.25rem;
+  transition: all 200ms ease-out;
+  border: 1px solid var(--gainsboro);
+}
+
+.Controller svg.Active {
+  width: 20%;
+}
+
+.Quantity {
+  font-weight: 400;
+  padding: 0rem 0.75rem;
+}
+
+.AddToCart {
+  width: 100%;
+  border: none;
+  padding: 0.75rem;
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+  border-radius: 0.25rem;
+  pointer-events: none;
+  color: var(--almostWhite);
+  transition: all 200ms ease-in-out;
+  background-color: var(--gainsboro);
+}
+
+.AddToCart.Active {
+  cursor: pointer;
+  pointer-events: all;
+  color: var(--darkCharcoal);
+  background-color: var(--mustard);
+}
+
+@media (min-width: 768px) {
+  .Controller,
+  .AddToCart {
+    max-width: 20rem;
+  }
+}

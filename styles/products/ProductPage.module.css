@@ -1,4 +1,4 @@
-.Product {
+.ProductPage {
   padding: 1rem;
 }
 
@@ -103,7 +103,7 @@
 }
 
 @media (min-width: 768px) {
-  .Product {
+  .ProductPage {
     padding: 1.5rem 2rem;
   }
 
@@ -115,20 +115,20 @@
 }
 
 @media (min-width: 1024px) {
-  .Product {
+  .ProductPage {
     display: flex;
     padding: 2rem 3rem;
     justify-content: space-between;
   }
 
   .Images {
-    width: 45%;
+    width: 50%;
     margin-bottom: 0rem;
     margin-right: 2.5rem;
   }
 
   .Content {
-    width: 55%;
+    width: 50%;
   }
 
   .AboutProduct {
