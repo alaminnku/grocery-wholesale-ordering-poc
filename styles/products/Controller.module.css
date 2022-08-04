@@ -60,3 +60,10 @@
     max-width: 20rem;
   }
 }
+
+@media (min-width: 1024px) {
+  .Controller,
+  .AddToCart {
+    max-width: 27rem;
+  }
+}

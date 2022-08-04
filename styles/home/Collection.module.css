@@ -1,5 +1,7 @@
 .Collection {
   padding: 1rem;
+  max-width: 1560px;
+  margin: 0 auto;
 }
 
 .Title {

@@ -44,10 +44,10 @@
 }
 
 .ItemsAndCheckout {
-  min-height: calc(100vh - 9.25rem);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  min-height: calc(100vh - 9rem);
 }
 
 .EmptyCart {
@@ -156,13 +156,23 @@
 
 @media (min-width: 768px) {
   .Cart {
-    width: 50vw;
+    width: 40vw;
+  }
+
+  .ItemsAndCheckout {
+    min-height: calc(100vh - 6rem);
   }
 }
 
 @media (min-width: 1024px) {
   .Cart {
-    width: 30vw;
+    width: 35vw;
     max-width: 25rem;
+  }
+}
+
+@media (min-width: 1280px) {
+  .ItemsAndCheckout {
+    min-height: calc(100vh - 4.5rem);
   }
 }
