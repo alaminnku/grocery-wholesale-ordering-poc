@@ -32,8 +32,8 @@ const Product = ({ product }) => {
           <a>
             <Image
               src={product.images[0].src}
-              height={9}
               width={16}
+              height={9}
               layout="responsive"
             />
           </a>

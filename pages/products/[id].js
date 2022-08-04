@@ -4,9 +4,12 @@ import { shopifyClient } from "@utils/shopify";
 import { formatId } from "@utils/formatId";
 import { AiOutlinePlus, AiOutlineMinus } from "react-icons/ai";
 import { useProduct } from "@contexts/ProductContext";
+import styles from "@styles/products/ProductPage.module.css";
+import { useState } from "react";
 
 const ProductDetailsPage = ({ product }) => {
   // Hooks
+  const [coverImage, setCoverImage] = useState(0);
   const {
     findCurrentProduct,
     changeProductVariant,
@@ -15,53 +18,100 @@ const ProductDetailsPage = ({ product }) => {
   } = useProduct();
   const { addVariantToCart } = useCart();
 
+  // Current product
+  const currentProduct = findCurrentProduct(product.id);
+
+  // Quantity
+  const quantity = currentProduct?.quantity;
+
+  // Price
+  const price = currentProduct?.price;
+
   // Image sources
   const imageSources = product.images.map((image) => image.src);
 
   return (
     <main>
-      <section>
-        <h3>{product.title}</h3>
+      <section className={styles.Product}>
+        <div className={styles.Images}>
+          {/* Cover image */}
+          <div className={styles.CoverImage}>
+            <Image
+              src={imageSources[coverImage]}
+              width={16}
+              height={9}
+              layout="responsive"
+              objectFit="cover"
+            />
+          </div>
 
-        {imageSources.map((src) => (
-          <Image
-            key={src}
-            src={src}
-            width={16}
-            height={9}
-            layout="responsive"
-          />
-        ))}
+          {/* All images */}
+          <div className={styles.ImageIcons}>
+            {imageSources.map((src, idx) => (
+              <div
+                key={src}
+                className={`${styles.ImageIcon} ${
+                  coverImage === idx && styles.Active
+                }`}
+                onClick={() => setCoverImage(idx)}
+              >
+                <Image
+                  src={src}
+                  width={16}
+                  height={9}
+                  layout="responsive"
+                  objectFit="cover"
+                />
+              </div>
+            ))}
+          </div>
+        </div>
 
-        <AiOutlinePlus onClick={() => increaseProductQuantity(product)} />
+        <div className={styles.Content}>
+          <div className={styles.AboutProduct}>
+            <h1>{product.title}</h1>
+            <p>
+              AUD $
+              {quantity > 0 ? price : parseFloat(product.variants[0].price)}
+            </p>
+            <p>{product.description}</p>
+          </div>
 
-        <span>{findCurrentProduct(product.id)?.quantity}</span>
+          <div className={styles.Controller}>
+            <select
+              onChange={(e) => changeProductVariant(product, e.target.value)}
+            >
+              {product.variants.map((variant) => (
+                <option key={formatId(variant.id)} value={formatId(variant.id)}>
+                  {variant.title}
+                </option>
+              ))}
+            </select>
 
-        {/* Render the minus button if product quantity is more than 0 */}
+            <AiOutlinePlus
+              className={quantity > 0 && styles.Active}
+              onClick={() => increaseProductQuantity(product)}
+            />
 
-        {findCurrentProduct(product.id)?.quantity > 1 && (
-          <AiOutlineMinus onClick={() => decreaseProductQuantity(product)} />
-        )}
+            <p className={quantity > 0 ? styles.Quantity : null}>
+              {quantity > 0 && quantity}
+            </p>
 
-        {/* Render cart item price or initial price */}
-        <p>
-          AUD $
-          {findCurrentProduct(product.id)?.price ||
-            parseFloat(product.variants[0].price)}
-        </p>
+            {quantity > 0 && (
+              <AiOutlineMinus
+                className={styles.Active}
+                onClick={() => decreaseProductQuantity(product)}
+              />
+            )}
+          </div>
 
-        {/* Product variant options */}
-        <select onChange={(e) => changeProductVariant(product, e.target.value)}>
-          {product.variants.map((variant) => (
-            <option key={formatId(variant.id)} value={formatId(variant.id)}>
-              {variant.title}
-            </option>
-          ))}
-        </select>
-
-        <button onClick={() => addVariantToCart(product.id)}>
-          Add to cart
-        </button>
+          <button
+            className={`${styles.AddToCart} ${quantity > 0 && styles.Active}`}
+            onClick={() => addVariantToCart(product.id)}
+          >
+            Add to cart
+          </button>
+        </div>
       </section>
     </main>
   );

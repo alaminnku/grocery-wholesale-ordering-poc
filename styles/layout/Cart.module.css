@@ -77,13 +77,14 @@
   width: 1.5rem;
   height: 1.5rem;
   padding: 0.3rem;
+  cursor: pointer;
   border-radius: 100%;
   color: var(--gainsboro);
   border: 1px solid var(--gainsboro);
 }
 
-.Quantity svg:first-child,
-.Quantity svg.Enabled {
+.Quantity svg.Enabled,
+.Quantity svg:first-child {
   color: var(--darkCharcoal);
   border: 1.5px solid var(--lightSlateGrey);
   transition: all 200ms ease-in-out;
@@ -113,10 +114,11 @@
 }
 
 .Content p:last-child {
-  color: var(--cgRed);
+  color: var(--midnightGreen);
 }
 
 .Delete svg {
+  cursor: pointer;
   font-size: 1.25rem;
   color: var(--lightSlateGrey);
 }
@@ -128,7 +130,7 @@
   border-radius: 0.25rem;
   padding: 0.75rem 1rem;
   color: var(--almostWhite);
-  background-color: var(--cgRed);
+  background-color: var(--midnightGreen);
 }
 
 .Overlay {
