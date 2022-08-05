@@ -25,10 +25,14 @@ const DesktopNav = ({ openCart, totalCartQuantity }) => {
           </Link>
         </li>
         <li>
-          <Link href="/about-us">
-            <a className={path === "/about-us" ? styles.Active : null}>
-              About us
-            </a>
+          <Link href="/">
+            <a>About us</a>
+          </Link>
+        </li>
+
+        <li>
+          <Link href="/">
+            <a>Order status</a>
           </Link>
         </li>
       </ul>
