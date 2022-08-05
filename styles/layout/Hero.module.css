@@ -1,0 +1,97 @@
+.Hero {
+  height: 12rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--almostWhite);
+}
+
+.Content {
+  text-align: center;
+}
+
+.Content h1 {
+  font-size: 1.75rem;
+  margin-bottom: 0.75rem;
+  color: var(--midnightGreen);
+}
+
+.Content p {
+  font-weight: 400;
+  width: 20rem;
+  margin: 0 auto;
+  margin-bottom: 1.25rem;
+  color: var(--lightSlateGrey);
+}
+
+.Content a {
+  font-weight: 400;
+  border-radius: 2rem;
+  padding: 0.25rem 0.75rem;
+  transition: all 200ms ease-in-out;
+  color: var(--midnightGreen);
+  border: 1px solid var(--midnightGreen);
+}
+
+.Content a:hover {
+  color: var(--metallicSeaweed);
+  border: 1px solid var(--metallicSeaweed);
+}
+
+@media (min-width: 768px) {
+  .Hero {
+    height: 15rem;
+  }
+
+  .Content h1 {
+    font-size: 2.5rem;
+  }
+
+  .Content p {
+    font-size: 1.1rem;
+    width: 25rem;
+  }
+
+  .Content a {
+    padding: 0.35rem 1rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .Hero {
+    height: 18rem;
+  }
+  .Content h1 {
+    font-size: 2.75rem;
+  }
+
+  .Content p {
+    width: 28rem;
+    font-size: 1.15rem;
+  }
+
+  .Content a {
+    padding: 0.35rem 1rem;
+  }
+}
+
+@media (min-width: 1280px) {
+  .Hero {
+    height: 25rem;
+  }
+
+  .Content h1 {
+    font-size: 3.5rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .Content p {
+    width: 35rem;
+    font-size: 1.25rem;
+    margin-bottom: 1.75rem;
+  }
+
+  .Content a {
+    padding: 0.5rem 1.25rem;
+  }
+}

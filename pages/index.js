@@ -1,10 +1,17 @@
 import { shopifyClient } from "@utils/shopify";
 import Collection from "@components/home/Collection";
 import { formatId } from "@utils/formatId";
+import Hero from "@components/layout/Hero";
 
 const HomePage = ({ collections }) => {
   return (
     <main>
+      <Hero
+        title="Best groceries in town"
+        text="Order finest groceries online and get it delivered right to your door!"
+        url="/products"
+        urlText="Browse products"
+      />
       {collections.map((collection) => (
         <Collection key={formatId(collection.id)} collection={collection} />
       ))}

@@ -1,6 +1,6 @@
 .Products {
   display: grid;
-  grid-gap: 1.5rem;
+  gap: 1.5rem;
   max-width: 1560px;
   margin: 0 auto;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -8,6 +8,6 @@
 
 @media (min-width: 1024px) {
   .Products {
-    grid-gap: 1.75rem;
+    gap: 1.75rem;
   }
 }

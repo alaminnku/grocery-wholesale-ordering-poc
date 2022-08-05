@@ -1,5 +1,7 @@
 .DesktopNav {
   display: none;
+  max-width: 1560px;
+  margin: 0 auto;
 }
 
 @media (min-width: 768px) {

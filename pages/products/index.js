@@ -1,3 +1,4 @@
+import Hero from "@components/layout/Hero";
 import { shopifyClient } from "@utils/shopify";
 import Products from "@components/Products/Products";
 import styles from "@styles/products/ProductsPage.module.css";
@@ -5,6 +6,12 @@ import styles from "@styles/products/ProductsPage.module.css";
 const ProductsPage = ({ products }) => {
   return (
     <main>
+      <Hero
+        title="Fresh and organic"
+        text="Eat healthy and stay fit. Shop 100% organic groceries with GWOPOC!"
+        url="/"
+        urlText="Browse collections"
+      />
       <section className={styles.Products}>
         <Products products={products} />
       </section>
